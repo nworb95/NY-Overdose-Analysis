@@ -2,8 +2,6 @@ import modin.pandas as pd
 import re
 from sodapy import Socrata
 import logging
-from time import time
-import asyncio
 import aiohttp
 
 format = "%(asctime)s: %(message)s"
@@ -20,7 +18,7 @@ def get_dataset_string(json_string):
     return re.search(r"resource/(.*).json", json_string).group(1)
 
 
-async def get_data(client, dataset_string, offset, limit):
+def get_data(client, dataset_string, offset, limit):
     """
     :param client: aiohttp ClientSession
     :param dataset_string: string identifier for dataset
@@ -50,10 +48,12 @@ def offset_data(json_string):
             get_data(client, dataset, offset, limit)
         )
         results.append(data)
-        offset = +limit
+        offset =+ limit
+        logger.info('Downloaded %d rows!', offset)
 
     return pd.concat(results)
 
 
 def main():
     ts = time()
+
