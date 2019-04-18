@@ -9,7 +9,24 @@ format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 logger = logging.getLogger(__name__)
 
-table_name_mapping = {'Community Health: Percentage of High School Drop Outs by County Map: Latest Data': 'dropouts_by_county'}
+table_name_mapping = {'https://health.data.ny.gov/resource/7728-g3f6.json': 'dropouts_by_county',
+                      'https://health.data.ny.gov/resource/sn5m-dv52.json': 'opioid_deaths_by_county',
+                      'https://health.data.ny.gov/resource/rv8x-4fm3.json': 'inpatient_discharges_by_county',
+                      'https://health.data.ny.gov/resource/acw9-uyeq.json': 'premature_deaths_by_county',
+                      'https://health.data.ny.gov/resource/8t6s-vqv5.json': 'unemployment_data_by_county',
+                      'https://health.data.ny.gov/resource/du4z-hmkb.json': 'medicaid_patient_visits_by_county',
+                      'https://data.ny.gov/resource/qkrk-6v78.json': 'unemployment_avg_duration_by_county',
+                      'https://data.ny.gov/resource/ekci-x6aq.json': 'active_construction_by_county',
+                      'https://data.ny.gov/resource/mef4-viwt.json': 'ny_state_career_centers',
+                      'https://data.ny.gov/resource/f6sn-r72s.json': 'low_income_tax_credits_by_county',
+                      'https://data.ny.gov/resource/shc7-xcbw.json': 'employment_wage_data_by_county',
+                      'https://data.ny.gov/resource/6k74-dgkb.json': 'overall_employment_data_by_county',
+                      'https://data.ny.gov/resource/b7d6-zygf.json': 'long_term_industry_projection_by_county',
+                      'https://data.ny.gov/resource/mx4v-8962.json': 'short_term_industry_projection_by_county',
+                      'https://data.ny.gov/resource/5hyu-bdh8.json': 'local_unemployment_data_by_county',
+                      'https://data.ny.gov/resource/ykyj-hw45.json': 'employment_data_by_race_by_county',
+                      'https://data.ny.gov/resource/a5je-8vxp.json': 'suny_data_by_county',
+                      'https://data.ny.gov/resource/dwpa-fswx.json': 'swm_data_by_county'}
 
 def get_mysql_engine():
     """
