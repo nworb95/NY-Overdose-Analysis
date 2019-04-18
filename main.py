@@ -8,5 +8,6 @@ __license__ = "MIT"
 def main():
     generate_database()
 
+
 if __name__ == "__main__":
     main()
