@@ -26,7 +26,17 @@ table_name_mapping = {'https://health.data.ny.gov/resource/7728-g3f6.json': 'dro
                       'https://data.ny.gov/resource/5hyu-bdh8.json': 'local_unemployment_data_by_county',
                       'https://data.ny.gov/resource/ykyj-hw45.json': 'employment_data_by_race_by_county',
                       'https://data.ny.gov/resource/a5je-8vxp.json': 'suny_data_by_county',
-                      'https://data.ny.gov/resource/dwpa-fswx.json': 'swm_data_by_county'}
+                      'https://data.ny.gov/resource/dwpa-fswx.json': 'swm_data_by_county',
+                      'https://data.ny.gov/resource/iyf9-ajxg.json': 'mined_land_data_by_county',
+                      'https://data.ny.gov/resource/agpz-6i9d.json': 'oil_gas_production_data_by_county',
+                      'https://data.ny.gov/resource/jshw-gkgu.json': 'union_compensation_claims_by_county',
+                      'https://data.ny.gov/resource/xgig-n5ch.json': 'mental_health_data_by_county',
+                      'https://data.ny.gov/resource/ybg9-s6bm.json': 'juvenile_detention_by_county',
+                      'https://data.ny.gov/resource/hfc5-3hsu.json': 'foster_child_data_by_county',
+                      'https://data.ny.gov/resource/rikd-mt35.json': 'adult_arrest_data_by_county',
+                      'https://data.ny.gov/resource/nymx-kgkn.json': 'jail_population_by_county',
+                      'https://data.ny.gov/resource/pmxm-gftz.json': 'parole_data_by_county',
+                      'https://data.ny.gov/resource/y7pw-wrny.json': 'recidivism_data_by_county'}
 
 def get_mysql_engine():
     """
