@@ -2,7 +2,7 @@ import modin.pandas as pd
 import re
 from sodapy import Socrata
 import logging
-import aiohttp
+import os
 
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
@@ -36,11 +36,13 @@ def offset_data(json_string):
     :return: final_data_frame
     """
     if "health.data.ny" not in json_string:
-        client = Socrata("data.ny.gov", None)
+        client = Socrata("data.ny.gov", os.environ['SOCRATA_TOKEN'])
+        logger.info('Connected to NY Data Socrata client!')
     else:
-        client = Socrata("health.data.ny.gov", None)
+        client = Socrata("health.data.ny.gov", os.environ['SOCRATA_TOKEN'])
+        logger.info('Connected to NY Health Data Socrata client!')
     offset = 0
-    limit = 1000
+    limit = 50000
     dataset = get_dataset_string(json_string)
     results = []
     while client.get(dataset, limit=limit, offset=offset):
@@ -48,7 +50,7 @@ def offset_data(json_string):
             get_data(client, dataset, offset, limit)
         )
         results.append(data)
-        offset =+ limit
+        offset += len(data)
         logger.info('Downloaded %d rows!', offset)
 
     return pd.concat(results)
