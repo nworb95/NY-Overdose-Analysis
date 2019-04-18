@@ -79,6 +79,27 @@ def download_data(client, table):
         logger.info("Downloaded %d rows!", offset)
     return pd.concat(results)
 
+def get_socrata_clients():
+    """
+    Initializes Socrata client objects for both NY State Data and
+    NY State Health Data.
+    :return: ny_state_data_client, ny_health_data_client
+    """
+    return Socrata("data.ny.gov", os.environ["SOCRATA_TOKEN"]), Socrata("health.data.ny.gov", os.environ["SOCRATA_TOKEN"])
+
+def generate_database(table_name_mapping):
+    """
+    (Re)generates NY Public Data MySQL database and names them with pre-mapped table names.
+    :param table_name_mapping:
+    :return: A regenerated database!
+    """
+    for json_string, name in table_name_mapping.items():
+        data = download_data(json_string)
+        data.to_sql(name = name,
+                    con = get_mysql_engine(),
+                    schema = 'ny_public_data',
+                    if_exists = 'replace')
+        logging.info("Uploaded table %s successfully!", name)
 
 def load_data(json_string):
     """
@@ -86,16 +107,17 @@ def load_data(json_string):
     :param json_string:
     :return: dictionary with dataframe as value and table title as key
     """
+    ny_state_data_client, ny_health_data_client = get_socrata_clients()
     if "health.data.ny" not in json_string:
-        client = Socrata("data.ny.gov", os.environ["SOCRATA_TOKEN"])
+        client = ny_health_data_client
         logger.info("Connected to NY Data Socrata client!")
     else:
-        client = Socrata("health.data.ny.gov", os.environ["SOCRATA_TOKEN"])
+        client = ny_state_data_client
         logger.info("Connected to NY Health Data Socrata client!")
     table_string = get_dataset_string(json_string)
-    table_title = client.get_metadata(table_string)['name']
-    logger.info("Downloaded table: %s", table_title)
-    return {table_title: download_data(client, table_string)}
+    table_description = client.get_metadata(json_string)['name']
+    logger.info("Downloaded table: %s", table_description)
+    return download_data(client, table_string)
 
 
 def main():
