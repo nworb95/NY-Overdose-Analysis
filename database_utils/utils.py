@@ -105,10 +105,9 @@ def load_data(json_string):
     logger.info("Downloaded table: %s", table_description)
     return download_data(client, table_string)
 
-def generate_database(table_name_mapping):
+def generate_database():
     """
     (Re)generates NY Public Data MySQL database and names them with pre-mapped table names.
-    :param table_name_mapping:
     :return: A regenerated database!
     """
     for json_string, name in table_name_mapping.items():
