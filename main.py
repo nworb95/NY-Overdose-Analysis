@@ -5,6 +5,10 @@ import logging
 from sqlalchemy import create_engine
 import os
 
+__author__ = "Emma Brown"
+__version__ = "0.1.0"
+__license__ = "MIT"
+
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 logger = logging.getLogger(__name__)
