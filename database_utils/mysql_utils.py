@@ -3,6 +3,7 @@ import os
 import re
 
 import pandas as pd
+import modin.pandas as mpd
 from sodapy import Socrata
 from sqlalchemy import create_engine
 
@@ -11,12 +12,14 @@ logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
 logger = logging.getLogger(__name__)
 
 table_name_mapping = {
+    "https://data.ny.gov/resource/jshw-gkgu.json": "union_compensation_claims_by_county",
+    "https://data.ny.gov/resource/dwpa-fswx.json": "swm_data_by_county",
+    "https://health.data.ny.gov/resource/du4z-hmkb.json": "medicaid_patient_visits_by_county",
+    "https://health.data.ny.gov/resource/rv8x-4fm3.json": "inpatient_discharges_by_county",
     "https://health.data.ny.gov/resource/7728-g3f6.json": "dropouts_by_county",
     "https://health.data.ny.gov/resource/sn5m-dv52.json": "opioid_deaths_by_county",
-    "https://health.data.ny.gov/resource/rv8x-4fm3.json": "inpatient_discharges_by_county",
     "https://health.data.ny.gov/resource/acw9-uyeq.json": "premature_deaths_by_county",
     "https://health.data.ny.gov/resource/8t6s-vqv5.json": "unemployment_data_by_county",
-    "https://health.data.ny.gov/resource/du4z-hmkb.json": "medicaid_patient_visits_by_county",
     "https://data.ny.gov/resource/qkrk-6v78.json": "unemployment_avg_duration_by_county",
     "https://data.ny.gov/resource/ekci-x6aq.json": "active_construction_by_county",
     "https://data.ny.gov/resource/mef4-viwt.json": "ny_state_career_centers",
@@ -28,10 +31,8 @@ table_name_mapping = {
     "https://data.ny.gov/resource/5hyu-bdh8.json": "local_unemployment_data_by_county",
     "https://data.ny.gov/resource/ykyj-hw45.json": "employment_data_by_race_by_county",
     "https://data.ny.gov/resource/a5je-8vxp.json": "suny_data_by_county",
-    "https://data.ny.gov/resource/dwpa-fswx.json": "swm_data_by_county",
     "https://data.ny.gov/resource/iyf9-ajxg.json": "mined_land_data_by_county",
     "https://data.ny.gov/resource/agpz-6i9d.json": "oil_gas_production_data_by_county",
-    "https://data.ny.gov/resource/jshw-gkgu.json": "union_compensation_claims_by_county",
     "https://data.ny.gov/resource/xgig-n5ch.json": "mental_health_data_by_county",
     "https://data.ny.gov/resource/ybg9-s6bm.json": "juvenile_detention_by_county",
     "https://data.ny.gov/resource/hfc5-3hsu.json": "foster_child_data_by_county",
@@ -81,7 +82,7 @@ def download_data(client, table):
         results.append(data)
         offset += len(data)
         logger.info("Downloaded %d rows!", offset)
-    return pd.concat(results)
+    return pd.DataFrame(mpd.concat(results))
 
 
 def get_socrata_clients():
@@ -97,21 +98,23 @@ def get_socrata_clients():
     )
 
 
-def load_data(url):
+def load_data(url, ny_state_data_client, ny_health_data_client):
     """
     Works around default 1000 limit for reading from Socrata jsons.
     :param url:
+    :param ny_state_data_client:
+    :param ny_health_data_client:
     :return: dictionary with dataframe as value and table title as key
     """
-    ny_state_data_client, ny_health_data_client = get_socrata_clients()
-    if "health.data.ny" not in url:
-        client = ny_health_data_client
-        logger.info("Using NY Data Socrata client!")
-    else:
-        client = ny_state_data_client
-        logger.info("Using NY Health Data Socrata client!")
     table_string = get_dataset_string(url)
-    table_description = client.get_metadata(table_string)["name"]
+    if "health.data.ny" not in url:
+        client = ny_state_data_client
+        logger.info("Using NY Data Socrata client!")
+        table_description = client.get_metadata(table_string)["name"]
+    else:
+        client = ny_health_data_client
+        logger.info("Using NY Health Data Socrata client!")
+        table_description = client.get_metadata(table_string)["name"]
     logger.info("Downloading table: %s", table_description)
     return download_data(client, table_string)
 
@@ -121,8 +124,9 @@ def generate_database():
     (Re)generates NY Public Data MySQL database and names them with pre-mapped table names.
     :return: A regenerated database!
     """
+    ny_state_data_client, ny_health_data_client = get_socrata_clients()
     for url, name in table_name_mapping.items():
-        data = load_data(url)
+        data = load_data(url, ny_state_data_client, ny_health_data_client)
         data.to_sql(
             name=name,
             con=get_mysql_engine(),
@@ -130,3 +134,5 @@ def generate_database():
             if_exists="replace",
         )
         logging.info("Uploaded table %s successfully!", name)
+    ny_health_data_client.close()
+    ny_state_data_client.close()
