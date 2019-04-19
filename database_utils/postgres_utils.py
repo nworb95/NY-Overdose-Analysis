@@ -49,7 +49,7 @@ def get_postgres_engine():
     :return: engine
     """
     return create_engine(
-        "mysql://root:{}@localhost:3306".format(os.environ["POSTGRES_LOCAL_PASS"])
+        "postgresql://root:@localhost:5432/public_data"
     )
 
 
@@ -73,16 +73,19 @@ def get_data(client, dataset_string, offset, limit):
     return client.get(dataset_string, limit=limit, offset=offset)
 
 
-def download_data(client, table):
+def download_data(name, client, table):
     offset = 0
     limit = 50000
-    results = []
     while client.get(table, limit=limit, offset=offset):
         data = pd.DataFrame.from_records(get_data(client, table, offset, limit))
-        results.append(data)
+        data.to_sql(
+            name=name,
+            con=get_postgres_engine(),
+            schema="new_york_state",
+            if_exists="replace",
+        )
         offset += len(data)
-        logger.info("Downloaded %d rows!", offset)
-    return pd.DataFrame(mpd.concat(results))
+        logger.info("Generated %d rows!", offset)
 
 
 def get_socrata_clients():
@@ -98,9 +101,10 @@ def get_socrata_clients():
     )
 
 
-def load_data(url, ny_state_data_client, ny_health_data_client):
+def load_data(name, url, ny_state_data_client, ny_health_data_client):
     """
     Works around default 1000 limit for reading from Socrata jsons.
+    :param name:
     :param url:
     :param ny_state_data_client:
     :param ny_health_data_client:
@@ -116,7 +120,7 @@ def load_data(url, ny_state_data_client, ny_health_data_client):
         logger.info("Using NY Health Data Socrata client!")
         table_description = client.get_metadata(table_string)["name"]
     logger.info("Downloading table: %s", table_description)
-    return download_data(client, table_string)
+    download_data(name, client, table_string)
 
 
 def generate_database():
@@ -126,13 +130,7 @@ def generate_database():
     """
     ny_state_data_client, ny_health_data_client = get_socrata_clients()
     for url, name in table_name_mapping.items():
-        data = load_data(url, ny_state_data_client, ny_health_data_client)
-        data.to_sql(
-            name=name,
-            con=get_mysql_engine(),
-            schema="ny_public_data",
-            if_exists="replace",
-        )
+        load_data(name, url, ny_state_data_client, ny_health_data_client)
         logging.info("Uploaded table %s successfully!", name)
     ny_health_data_client.close()
     ny_state_data_client.close()
