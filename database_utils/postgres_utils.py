@@ -43,13 +43,13 @@ table_name_mapping = {
 }
 
 
-def get_mysql_engine():
+def get_postgres_engine():
     """
     Connects to local mysql database to cache downloaded data.
     :return: engine
     """
     return create_engine(
-        "mysql://root:{}@localhost:3306".format(os.environ["MYSQL_LOCAL_PASS"])
+        "mysql://root:{}@localhost:3306".format(os.environ["POSTGRES_LOCAL_PASS"])
     )
 
 
