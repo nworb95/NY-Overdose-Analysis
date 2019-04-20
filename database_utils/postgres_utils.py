@@ -3,7 +3,6 @@ import os
 import re
 
 import pandas as pd
-import modin.pandas as mpd
 from sodapy import Socrata
 from sqlalchemy import create_engine
 
@@ -45,8 +44,8 @@ table_name_mapping = {
 
 def get_postgres_engine():
     """
-    Connects to local mysql database to cache downloaded data.
-    :return: engine
+
+    :return:
     """
     return create_engine(
         "postgresql://root:@localhost:5432/public_data"
@@ -55,29 +54,36 @@ def get_postgres_engine():
 
 def get_dataset_string(json_string):
     """
-    Grabs dataset string from URL.
+
     :param json_string:
-    :return: dataset_string
+    :return:
     """
     return re.search(r"resource/(.*).json", json_string).group(1)
 
 
-def get_data(client, dataset_string, offset, limit):
+def get_data(client, dataset_string, offset, limit=50000):
     """
-    :param client: ClientSession
-    :param dataset_string: string identifier for dataset
+
+    :param client:
+    :param dataset_string:
     :param offset:
     :param limit:
-    :return: json
+    :return:
     """
     return client.get(dataset_string, limit=limit, offset=offset)
 
 
 def download_data(name, client, table):
+    """
+
+    :param name:
+    :param client:
+    :param table:
+    :return:
+    """
     offset = 0
-    limit = 50000
-    while client.get(table, limit=limit, offset=offset):
-        data = pd.DataFrame.from_records(get_data(client, table, offset, limit))
+    while client.get(table, limit=50000, offset=offset):
+        data = pd.DataFrame.from_records(get_data(client, table, offset))
         data.to_sql(
             name=name,
             con=get_postgres_engine(),
@@ -90,9 +96,8 @@ def download_data(name, client, table):
 
 def get_socrata_clients():
     """
-    Initializes Socrata client objects for both NY State Data and
-    NY State Health Data.
-    :return: ny_state_data_client, ny_health_data_client
+
+    :return:
     """
     logger.info('Connecting to Socrata clients!')
     return (
@@ -103,30 +108,29 @@ def get_socrata_clients():
 
 def load_data(name, url, ny_state_data_client, ny_health_data_client):
     """
-    Works around default 1000 limit for reading from Socrata jsons.
+
     :param name:
     :param url:
     :param ny_state_data_client:
     :param ny_health_data_client:
-    :return: dictionary with dataframe as value and table title as key
+    :return:
     """
     table_string = get_dataset_string(url)
     if "health.data.ny" not in url:
         client = ny_state_data_client
         logger.info("Using NY Data Socrata client!")
-        table_description = client.get_metadata(table_string)["name"]
     else:
         client = ny_health_data_client
         logger.info("Using NY Health Data Socrata client!")
-        table_description = client.get_metadata(table_string)["name"]
+    table_description = client.get_metadata(table_string)["name"]
     logger.info("Downloading table: %s", table_description)
     download_data(name, client, table_string)
 
 
-def generate_database():
+def seed_database():
     """
-    (Re)generates NY Public Data MySQL database and names them with pre-mapped table names.
-    :return: A regenerated database!
+
+    :return:
     """
     ny_state_data_client, ny_health_data_client = get_socrata_clients()
     for url, name in table_name_mapping.items():
