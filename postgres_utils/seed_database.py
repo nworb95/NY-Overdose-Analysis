@@ -53,7 +53,7 @@ def get_postgres_engine():
     :return:
     """
     return psycopg2.connect(
-        database="public_data",
+        database="postgres_db",
         user="postgres",
         password="postgres",
         host="localhost",
