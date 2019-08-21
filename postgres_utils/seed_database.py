@@ -4,10 +4,15 @@ import re
 
 import pandas as pd
 from sodapy import Socrata
-from sqlalchemy import create_engine
+import psycopg2
 
-format = "%(asctime)s: %(message)s"
-logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
+logging.basicConfig(
+    filemode="w",
+    filename="logs/postgres.log",
+    format="%(asctime)s: %(message)s",
+    level=logging.INFO,
+    datefmt="%H:%M:%S",
+)
 logger = logging.getLogger(__name__)
 
 table_name_mapping = {
@@ -47,8 +52,12 @@ def get_postgres_engine():
 
     :return:
     """
-    return create_engine(
-        "postgresql://root:@localhost:5432/public_data"
+    return psycopg2.connect(
+        database="public_data",
+        user="postgres",
+        password="postgres",
+        host="localhost",
+        port="5431",
     )
 
 
@@ -73,7 +82,7 @@ def get_data(client, dataset_string, offset, limit=50000):
     return client.get(dataset_string, limit=limit, offset=offset)
 
 
-def download_data(name, client, table):
+def download_data(dataset, client, table):
     """
 
     :param name:
@@ -82,16 +91,13 @@ def download_data(name, client, table):
     :return:
     """
     offset = 0
+    conn = get_postgres_engine()
     while client.get(table, limit=50000, offset=offset):
         data = pd.DataFrame.from_records(get_data(client, table, offset))
-        data.to_sql(
-            name=name,
-            con=get_postgres_engine(),
-            schema="new_york_state",
-            if_exists="replace",
-        )
+        data.to_sql(name=dataset, con=conn, schema="public", if_exists="replace")
         offset += len(data)
         logger.info("Generated %d rows!", offset)
+    conn.close()
 
 
 def get_socrata_clients():
@@ -99,14 +105,14 @@ def get_socrata_clients():
 
     :return:
     """
-    logger.info('Connecting to Socrata clients!')
+    logger.info("Connecting to Socrata clients!")
     return (
         Socrata("data.ny.gov", os.environ["SOCRATA_TOKEN"]),
         Socrata("health.data.ny.gov", os.environ["SOCRATA_TOKEN"]),
     )
 
 
-def load_data(name, url, ny_state_data_client, ny_health_data_client):
+def load_data(dataset, url, ny_state_data_client, ny_health_data_client):
     """
 
     :param name:
@@ -124,12 +130,12 @@ def load_data(name, url, ny_state_data_client, ny_health_data_client):
         logger.info("Using NY Health Data Socrata client!")
     table_description = client.get_metadata(table_string)["name"]
     logger.info("Downloading table: %s", table_description)
-    download_data(name, client, table_string)
+    download_data(dataset, client, table_string)
 
 
 def seed_database():
     """
-
+    Initializes postgres database with freshly scraped Socrata data.
     :return:
     """
     ny_state_data_client, ny_health_data_client = get_socrata_clients()

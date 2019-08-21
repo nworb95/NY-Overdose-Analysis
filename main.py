@@ -1,4 +1,4 @@
-from database_utils.postgres_utils import seed_database
+from postgres_utils.seed_database import seed_database, logger
 
 __author__ = "Emma Brown"
 __version__ = "0.1.0"
@@ -10,4 +10,6 @@ def main():
 
 
 if __name__ == "__main__":
+    logger.info("Seeding database!")
     main()
+    logger.info("Finished!")
