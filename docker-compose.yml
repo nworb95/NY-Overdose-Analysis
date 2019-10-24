@@ -1,14 +1,37 @@
 version: '3'
 
 services:
-  database:
+  db:
     image: postgres:latest
     container_name: postgres_db
-    environment:
-      POSTGRES_USER: postgres
+    volumes:
+      - "./data:/var/lib/postgresql/data"
     ports:
-      - "5431:5431"
+      - "54320:5432"
+    networks:
+      - overdose
+
+  app:
+    image: overdose-analysis:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - "./output:/var/app/output"
+      - "./logs:/var/app/logs"
+    environment:
+      - SOCRATA_TOKEN
+    depends_on:
+      - db
+    networks:
+      - overdose
 
 volumes:
-  db-data:
+  logs:
+  output:
+  data:
     driver: local
+
+networks:
+  overdose:
+

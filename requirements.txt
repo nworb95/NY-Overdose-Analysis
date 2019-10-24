@@ -1,3 +1,4 @@
+sqlalchemy
 sodapy
 pandas
 psycopg2
