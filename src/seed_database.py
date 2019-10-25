@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 # TODO make this a class -- database_generator? database_refresher?
 # TODO -- rationalize variable names
 
-with open("data/ny_sources.json", "r") as f:
+with open("output/ny_sources.json", "r") as f:
     table_name_mapping = json.load(f)
 
 
@@ -52,16 +52,19 @@ def download_data(client, table, name):
     :return:
     """
     offset = 0  # make this len of table in db to only get new data
-    file_path = "output/{}/".format(name)
+    file_path = "/var/app/output/{}/".format(name)
     if not os.path.exists(file_path):
         os.mkdir(file_path)
     conn = get_postgres_engine()
     while client.get(table, limit=10000, offset=offset):
         data = pd.DataFrame.from_records(get_data(client, table, offset))
         logging.info(data.head())
-        data.to_json(file_path + "{}.json".format(offset))
+        try:
+            data.to_json(file_path + "{}.json".format(offset))
+        except Exception as e:
+            logging.warning(e)
         offset += len(data)
-        logging.info("Downloaded output to %d", file_path + "{}.json".format(offset))
+        logging.info("Downloaded output to {}".format(file_path + "{}.json".format(offset)))
     conn.close()
 
 
