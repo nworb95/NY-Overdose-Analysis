@@ -225,3 +225,55 @@ class LongTermIndustryProjection(Base):
     net_change = Column(Integer)
     annual_growth_rate = Column(Numeric)
 
+class ShortTermIndustryProjection(Base):
+    __tablename__ = 'countywise_short_term_industry_production_data'
+    id = Column(Integer, primary_key=True)
+    area = Column(String)
+    period = Column(String)
+    industry_title = Column(String)
+    base_year_employment_estimate = Column(Integer)
+    projected_year_employment_estimate = Column(Integer)
+    net_change = Column(Integer)
+    annual_growth_rate = Column(Numeric)
+
+
+class LocalUnemployment(Base):
+    __tablename__ = 'countywise_unemployment_data'
+    id = Column(Integer, primary_key=True)
+    area = Column(String)
+    year = Column(Integer)
+    month = Column(Integer)
+    laborforce = Column(Integer)
+    employed = Column(Integer)
+    unemployed = Column(Integer)
+    unemployment_rate = Column(Numeric)
+
+
+class RacialEmployment(Base):
+    __tablename__ = 'countywise_employment_data_by_ratio'
+    id = Column(Integer, primary_key=True)
+    region = Column(String)
+    year = Column(Integer)
+    total_population_16_years_and_older = Column(Integer)
+    total_civilian_labor_force = Column(Integer)
+    total_unemployed = Column(Integer)
+    total_unemployment_rate = Column(Numeric)
+    white_alone_population_16_years_and_older = Column(Integer)
+    white_alone_civilian_labor_force = Column(Integer)
+    white_alone_unemployed = Column(Integer)
+    white_alone_unemployment_rate = Column(Numeric)
+    black_or_african_american_alone_population_16_years_and_older = Column(Integer)
+    black_or_african_american_alone_civilian_labor_force = Column(Integer)
+    black_or_african_american_alone_unemployed = Column(Integer)
+    black_or_african_american_alone_unemployment_rate = Column(Numeric)
+    asian_alone_population_16_years_and_older = Column(Integer)
+    asian_alone_civilian_labor_force = Column(Integer)
+    hispanic_or_latino_population_16_years_and_older = Column(Integer)
+    hispanic_or_latino_civilian_labor_force = Column(Integer)
+    hispanic_or_latino_unemployed = Column(Integer)
+    hispanic_or_latino_unemployment_rate = Column(Numeric)
+    asian_alone_unemployed = Column(Integer)
+    asian_alone_unemployment_rate = Column(Numeric)
+
+
+class SUNYData(Base):
