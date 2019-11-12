@@ -313,4 +313,18 @@ class MinedLand(Base):
 
 class OilGasProduction(Base):
     __tablename__ = 'countywise_oil_gas_production'
-    api_well = Column(Integer, primary_key=True)
+    api_wellno = Column(Integer, primary_key=True)
+    cnty = Column(String)
+    year = Column(Integer)
+    coname = Column(String)
+    hole = Column(Integer)
+    well_typ = Column(String)
+    field = Column(String)
+    wl_status = Column(String)
+    well_nm = Column(Integer)
+    town = Column(String)
+    production = Column(Integer)
+    gas = Column(Integer)
+    water = Column(Integer)
+    oilprod = Column(Integer)
+    
