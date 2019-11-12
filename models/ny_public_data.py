@@ -277,3 +277,40 @@ class RacialEmployment(Base):
 
 
 class SUNYData(Base):
+    __tablename__ = 'countywise_suny_data'
+    state = Column(String)
+    county = Column(String)
+    long1 = Column(Numeric)
+    lat1 = Column(Numeric)
+    college_of_institution_type = Column(String)
+    campus = Column(String)
+    city = Column(String)
+    zip = Column(Integer)
+    institution_level = Column(String)
+    institution_type = Column(String)
+    undergrad_enrollment = Column(Integer)
+    graduate_enrollment = Column(Integer)
+
+class MinedLand(Base):
+    __tablename__ = 'countywise_mined_land_data'
+    mine_id_number = Column(Integer, primary_key=True)
+    facility_county = Column(String)
+    facility_town = Column(String)
+    acres_controlled = Column(Numeric)
+    acres_life_of_mine = Column(Numeric)
+    acres_affected = Column(Numeric)
+    acres_reclaimed = Column(Numeric)
+    acres_bb = Column(Numeric)
+    acresbb_range = Column(Numeric)
+    commodity = Column(String)
+    latitude = Column(Numeric)
+    longitude = Column(Numeric)
+    reclamationtype = Column(String)
+    financial_security_amount = Column(Numeric)
+    underground_mine = Column(String)
+    last_modified_date = Column(Date)
+
+
+class OilGasProduction(Base):
+    __tablename__ = 'countywise_oil_gas_production'
+    api_well = Column(Integer, primary_key=True)
