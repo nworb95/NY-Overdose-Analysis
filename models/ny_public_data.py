@@ -344,3 +344,107 @@ class MentalHealthData(Base):
     units_total = Column(Numeric)
     paid_claim_total = Column(Integer)
 
+
+class JuvenileDetention(Base):
+    __tablename__ = 'countywise_juvenile_detention_data'
+    id = Column(Integer, primary_key=True)
+    county_district = Column(String)
+    year = Column(Integer)
+    secure_non_secure_admissions = Column(Integer)
+    non_secure_admissions = Column(Integer)
+    secure_non_secure_unique_youth = Column(Integer)
+    non_secure_unique_youth = Column(Integer)
+
+
+class FosterChildrenData(Base):
+    """
+    Gonna have to normalize this by county-wise child population
+    """
+    __tablename__ = 'countywise_foster_child_data'
+    id = Column(Integer, primary_key=True)
+    county = Column(String)
+    year = Column(Integer)
+    adoptive_home = Column(Integer)
+    agency_operated_boarding_home = Column(Integer)
+    approved_relative_home = Column(Integer)
+    foster_boarding_home = Column(Integer)
+    group_home = Column(Integer)
+    group_residence = Column(Integer)
+    institution = Column(Integer)
+    supervised_independent_living = Column(Integer)
+    other = Column(Integer)
+    total_days_in_care = Column(Integer)
+    admissions = Column(Integer)
+    discharges = Column(Integer)
+    children_in_care = Column(Integer)
+    number_of_children_served = Column(Integer)
+    indicated_cps_reports = Column(Integer)
+
+
+class AdultArrests(Base):
+    __tablename__ = 'countywise_adult_arrest_data'
+    id = Column(Integer, primary_key=True)
+    county = Column(String)
+    year = Column(Integer)
+    total = Column(Integer)
+    felony_total = Column(Integer)
+    drug_total = Column(Integer)
+    violent_felony = Column(Integer)
+    dwi_felony = Column(Integer)
+    other_felony = Column(Integer)
+    misdemeanor_total = Column(Integer)
+    drug_misd = Column(Integer)
+    dwi_misd = Column(Integer)
+    property_misd = Column(Integer)
+    other_misd = Column(Integer)
+
+
+class JailPopulation(Base):
+    """
+    Definitely lag this to see effect of recidivism -- somehow need to parse out
+    effects of prison death -- guess I can use the recidivism rate
+    """
+    __tablename__ = 'countywise_jail_population'
+    id = Column(Integer, primary_key=True)
+    facility_name = Column(String)
+    year = Column(Integer)
+    census_2 = Column(Integer)
+    boarded_out = Column(Integer)
+    boarded_in = Column(Integer)
+    census = Column(Integer)
+    sentenced = Column(Integer)
+    civil = Column(Integer)
+    federal = Column(Integer)
+    technical_parole_violators = Column(Integer)
+    state_readies = Column(Integer)
+    other_unsentenced = Column(Integer)
+
+
+
+class ParoleData(Base):
+    """
+    This is unexpectedly rich!
+    """
+    __tablename__ = 'countywise_parole_data'
+    id = Column(Integer)
+    snapshot_year = Column(Integer)
+    region = Column(String)
+    county = Column(String)
+    supervision_level = Column(String)
+    gender = Column(String)
+    age = Column(Integer)
+    crime = Column(String)
+    race_ethnicity = Column(String)
+
+
+
+class RecidivismData(Base):
+    """
+    100k rows
+    """
+    __tablename__ = 'countywise_recidivism_data'
+    id = Column(Integer, primary_key=True)
+    county_of_indictment = Column(String)
+    release_year = Column(Integer)
+    age_at_release = Column(Integer)
+    return_status = Column(String)
