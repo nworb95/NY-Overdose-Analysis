@@ -318,7 +318,7 @@ class OilGasProduction(Base):
     year = Column(Integer)
     coname = Column(String)
     hole = Column(Integer)
-    well_typ = Column(String)
+    well_type = Column(String)
     field = Column(String)
     wl_status = Column(String)
     well_nm = Column(Integer)
@@ -327,4 +327,20 @@ class OilGasProduction(Base):
     gas = Column(Integer)
     water = Column(Integer)
     oilprod = Column(Integer)
-    
+
+
+class MentalHealthData(Base):
+    __tablename__ = 'countywise_mental_health_data'
+    id = Column(Integer, primary_key=True)
+    row_created_date_time = Column(Date)
+    county_label = Column(String)
+    omh_region_label = Column(String)
+    omh_region_code = Column(Integer)
+    service_year = Column(Integer)
+    age_group = Column(String)
+    rate_code_group = Column(String)
+    recipient_count_by_county = Column(Integer)
+    count_of_recipients_by_rate_code_group_and_county = Column(Integer)
+    units_total = Column(Numeric)
+    paid_claim_total = Column(Integer)
+
