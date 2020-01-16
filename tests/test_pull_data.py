@@ -1,4 +1,4 @@
-from src.seed_database import seed_database
+from src.pull_data import seed_database
 from models.ny_public_data import ParoleData
 from config import TEST_URI, TEST_OVERDOSE_DATA
 import json

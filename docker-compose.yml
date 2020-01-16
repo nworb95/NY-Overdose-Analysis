@@ -1,15 +1,6 @@
 version: '3'
 
 services:
-  db:
-    image: postgres:latest
-    restart: always
-    container_name: postgres_db
-    volumes:
-      - "./data:/var/lib/postgresql/data"
-    ports:
-      - "54320:5432"
-
   app:
     image: overdose-analysis:latest
     build:
@@ -20,8 +11,6 @@ services:
       - "./logs:/var/app/logs"
     environment:
       - SOCRATA_TOKEN
-    depends_on:
-      - db
 
 volumes:
   logs:

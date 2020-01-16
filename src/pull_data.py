@@ -6,8 +6,8 @@ import pandas as pd
 from sodapy import Socrata
 from sqlalchemy import create_engine
 
-# TODO make this a class -- database_generator? database_refresher?
-# TODO -- rationalize variable names
+# TODO you're not seeding a database anymore
+
 
 
 def get_engine(uri):
@@ -51,7 +51,7 @@ def download_data(uri, client, table, name):
     file_path = "/var/app/output/{}/".format(name)
     if not os.path.exists(file_path):
         os.mkdir(file_path)
-    conn = get_engine(uri)
+    # conn = get_engine(uri)
     while client.get(table, limit=10000, offset=offset):
         data = pd.DataFrame.from_records(get_data(client, table, offset))
         logging.info(data.head())
@@ -61,7 +61,7 @@ def download_data(uri, client, table, name):
             logging.warning(e)
         offset += len(data)
         logging.info("Downloaded output to {}".format(file_path + "{}.json".format(offset)))
-    conn.close()
+    # conn.close()
 
 
 def get_socrata_clients():
