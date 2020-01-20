@@ -1,13 +1,8 @@
 import logging
 import os
 import re
-
 import pandas as pd
 from sodapy import Socrata
-from sqlalchemy import create_engine
-
-
-# TODO you're not seeding a database anymore
 
 
 def get_dataset_string(json_string):
@@ -31,7 +26,7 @@ def get_data(client, dataset_string, offset, limit=50000):
     return client.get(dataset_string, limit=limit, offset=offset)
 
 
-def get_socrata_data(client, table, name):
+def paginate_data(client, table, name):
     """
     :param client:
     :param table:
@@ -53,7 +48,7 @@ def get_socrata_data(client, table, name):
         logging.info("Downloaded output to {}".format(file_path + "{}.json".format(offset)))
 
 
-def get_socrata_clients():
+def get_clients():
     """
 
     :return:
@@ -64,7 +59,7 @@ def get_socrata_clients():
     )
 
 
-def load_data(url, name, ny_state_data_client, ny_health_data_client):
+def download_data(url, name, ny_state_data_client, ny_health_data_client):
     """
 
     :param name:
@@ -82,7 +77,7 @@ def load_data(url, name, ny_state_data_client, ny_health_data_client):
         logging.info("Using NY Health Data Socrata client!")
     table_description = client.get_metadata(table_string)["name"]
     logging.info("Downloading table: %s", table_description)
-    get_socrata_data(client, table_string, name)
+    paginate_data(client, table_string, name)
 
 
 def pull_socrata_data(table_name_mapping):
@@ -90,10 +85,9 @@ def pull_socrata_data(table_name_mapping):
     Initializes postgres database with freshly scraped Socrata data.
     :return:
     """
-    ny_state_data_client, ny_health_data_client = get_socrata_clients()
+    ny_state_data_client, ny_health_data_client = get_clients()
     logging.info("Connected to Socrata clients!")
     for url, name in table_name_mapping.items():
-        load_data(url, name, ny_state_data_client, ny_health_data_client)
-        logging.info("Uploaded table %s successfully!", name)
+        download_data(url, name, ny_state_data_client, ny_health_data_client)
     ny_health_data_client.close()
     ny_state_data_client.close()
