@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - "./output:/var/app/output"
+      - "./data:/var/app/data"
       - "./logs:/var/app/logs"
     environment:
       - SOCRATA_TOKEN

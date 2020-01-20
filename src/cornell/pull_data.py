@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 from io import BytesIO
 import xlrd
+from src.cornell.clean_data import clean_actual_population_data, clean_projected_population_data
 
 county_list = [
     1,
@@ -81,13 +82,14 @@ def get_actual_population_data():
 
 
 def cache_actual_population_data(df):
-    df.to_json("./raw_data/actual_ny_population_data.json")
+    df.to_json("./data/cache/actual_ny_population_data.json")
 
 
 def pull_actual_population_data():
     df = get_actual_population_data()
-    cache_actual_population_data(df)
-    return df
+    clean_df = clean_actual_population_data(df)
+    cache_actual_population_data(clean_df)
+    return clean_df
 
 
 def get_projected_population_data():
@@ -108,10 +110,11 @@ def get_projected_population_data():
 
 
 def cache_projected_population_data(df):
-    df.to_json('./raw_data/projected_ny_population_data.json')
+    df.to_json('./data/cache/projected_ny_population_data.json')
 
 
 def pull_projected_population_data():
     df = get_projected_population_data()
-    cache_projected_population_data(df)
-    return df
+    clean_df = clean_projected_population_data(df)
+    cache_projected_population_data(clean_df)
+    return clean_df

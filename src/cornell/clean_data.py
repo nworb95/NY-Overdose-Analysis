@@ -2,7 +2,19 @@ import pandas as pd
 
 
 def clean_actual_population_data(df):
-    df = df.rename(columns={"Unnamed: 0": "County", "Unnamed: 13": "2010"}).drop(
+    df = df.rename(columns={"Unnamed: 0": "County", "Unnamed: 13": "2010",
+            2000: "2000",
+            2001: "2001",
+            2002: "2002",
+            2003: "2003",
+            2004: "2004",
+            2005: "2005",
+            2006: "2006",
+            2007: "2007",
+            2008: "2008",
+            2009: "2009",
+        }
+    ).drop(
         ["Unnamed: 1", "Unnamed: 12"], axis=1
     )
     df["County"] = df["County"].str.replace(".", "")
@@ -10,7 +22,7 @@ def clean_actual_population_data(df):
 
 
 def clean_projected_population_data(df):
-    filtered_df = df[((df["SEX_DESCR"] == "All") & (df["AGEGRP_DESCR"] == "Total"))]
+    filtered_df = df[(df["SEX_DESCR"] == "All") & (df["AGEGRP_DESCR"] == "Total")]
     clean_df = filtered_df.rename(
         columns={"COUNTY_DESCR": "County", "YR_2015": "2015", "YR_2016": "2016", "YR_2017": "2017", "YR_2018": "2018",
                  "YR_2019": "2019", "YR_2020": "2020", "YR_2021": "2021", "YR_2022": "2022", "YR_2023": "2023",
@@ -20,4 +32,4 @@ def clean_projected_population_data(df):
                  "YR_2039": "2039", "YR_2040": "2040"}
     ).drop(["COUNTY", "SEXCODE", "SEX_DESCR", "AGEGRPCODE", "AGEGRP_DESCR", "RACECODE", "RACE_DESCR"], axis=1)
     clean_df['County'] = clean_df['County'] + ' County'
-    return clean_df
+    return clean_df.reset_index().drop(['index'], axis=1)
