@@ -47,7 +47,9 @@ def paginate_data(client, table, name):
         except Exception as e:
             logging.warning(e)
         offset += len(data)
-        logging.info("Downloaded output to {}".format(file_path + "{}.json".format(offset)))
+        logging.info(
+            "Downloaded output to {}".format(file_path + "{}.json".format(offset))
+        )
 
 
 def get_clients():
