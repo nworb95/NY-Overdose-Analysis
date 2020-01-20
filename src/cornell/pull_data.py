@@ -90,7 +90,7 @@ def pull_actual_population_data():
     return df
 
 
-def get_projected_population_data(county_list):
+def get_projected_population_data():
     projection_df_list = []
     for request in county_list:
         projection_df_list.append(
@@ -111,7 +111,7 @@ def cache_projected_population_data(df):
     df.to_json('./raw_data/projected_ny_population_data.json')
 
 
-def pull_projected_population_data(county_list):
-    df = get_projected_population_data(county_list)
+def pull_projected_population_data():
+    df = get_projected_population_data()
     cache_projected_population_data(df)
     return df
