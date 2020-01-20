@@ -1,6 +1,6 @@
 __pycache__/
 .ipynb_checkpoints/
 .idea/
-data/raw_data/*
-data/cache/*
+data/raw_data/
+data/cache/
 overdose_analysis.ipynb
