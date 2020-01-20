@@ -6,17 +6,8 @@ import pandas as pd
 from sodapy import Socrata
 from sqlalchemy import create_engine
 
+
 # TODO you're not seeding a database anymore
-
-
-
-def get_engine(uri):
-    """
-
-    :return:
-    """
-    engine = create_engine(uri)
-    return engine.connect()
 
 
 def get_dataset_string(json_string):
@@ -40,7 +31,7 @@ def get_data(client, dataset_string, offset, limit=50000):
     return client.get(dataset_string, limit=limit, offset=offset)
 
 
-def download_data(uri, client, table, name):
+def get_socrata_data(client, table, name):
     """
     :param client:
     :param table:
@@ -51,7 +42,6 @@ def download_data(uri, client, table, name):
     file_path = "/var/app/output/{}/".format(name)
     if not os.path.exists(file_path):
         os.mkdir(file_path)
-    # conn = get_engine(uri)
     while client.get(table, limit=10000, offset=offset):
         data = pd.DataFrame.from_records(get_data(client, table, offset))
         logging.info(data.head())
@@ -61,7 +51,6 @@ def download_data(uri, client, table, name):
             logging.warning(e)
         offset += len(data)
         logging.info("Downloaded output to {}".format(file_path + "{}.json".format(offset)))
-    # conn.close()
 
 
 def get_socrata_clients():
@@ -75,7 +64,7 @@ def get_socrata_clients():
     )
 
 
-def load_data(uri, url, name, ny_state_data_client, ny_health_data_client):
+def load_data(url, name, ny_state_data_client, ny_health_data_client):
     """
 
     :param name:
@@ -93,10 +82,10 @@ def load_data(uri, url, name, ny_state_data_client, ny_health_data_client):
         logging.info("Using NY Health Data Socrata client!")
     table_description = client.get_metadata(table_string)["name"]
     logging.info("Downloading table: %s", table_description)
-    download_data(uri, client, table_string, name)
+    get_socrata_data(client, table_string, name)
 
 
-def seed_database(uri, table_name_mapping):
+def pull_socrata_data(table_name_mapping):
     """
     Initializes postgres database with freshly scraped Socrata data.
     :return:
@@ -104,7 +93,7 @@ def seed_database(uri, table_name_mapping):
     ny_state_data_client, ny_health_data_client = get_socrata_clients()
     logging.info("Connected to Socrata clients!")
     for url, name in table_name_mapping.items():
-        load_data(uri, url, name, ny_state_data_client, ny_health_data_client)
+        load_data(url, name, ny_state_data_client, ny_health_data_client)
         logging.info("Uploaded table %s successfully!", name)
     ny_health_data_client.close()
     ny_state_data_client.close()

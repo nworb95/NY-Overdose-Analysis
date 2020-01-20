@@ -1,4 +1,4 @@
-from src.pull_data import seed_database
+from src.pull_data import pull_socrata_data
 from config import PROD_URI, NY_OVERDOSE_DATA
 import logging
 import json
@@ -9,7 +9,7 @@ __license__ = "MIT"
 
 logging.basicConfig(
     # filemode="w",
-    # filename="/var/app/logs/database.log",
+    # filename="/var/app/logs/data_pull.log",
     format="%(asctime)s: %(message)s",
     level=logging.INFO,
     datefmt="%H:%M:%S",
@@ -19,7 +19,7 @@ logging.basicConfig(
 def main():
     with open(NY_OVERDOSE_DATA, "r") as f:
         table_name_mapping = json.load(f)
-    seed_database(PROD_URI, table_name_mapping)
+    pull_socrata_data(table_name_mapping)
 
 
 if __name__ == "__main__":
