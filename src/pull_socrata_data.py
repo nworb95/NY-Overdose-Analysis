@@ -1,7 +1,9 @@
 import logging
 import os
 import re
+import json
 import pandas as pd
+from config import NY_OVERDOSE_DATA
 from sodapy import Socrata
 
 
@@ -80,11 +82,13 @@ def download_data(url, name, ny_state_data_client, ny_health_data_client):
     paginate_data(client, table_string, name)
 
 
-def pull_socrata_data(table_name_mapping):
+def pull_socrata_data():
     """
     Initializes postgres database with freshly scraped Socrata data.
-    :return:
+    :return: Updated NY countywise Socrata data
     """
+    with open(NY_OVERDOSE_DATA, "r") as f:
+        table_name_mapping = json.load(f)
     ny_state_data_client, ny_health_data_client = get_clients()
     logging.info("Connected to Socrata clients!")
     for url, name in table_name_mapping.items():
