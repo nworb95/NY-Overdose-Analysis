@@ -1,4 +1,4 @@
-from src.pull_data import pull_socrata_data
+from src.pull_socrata_data import pull_socrata_data
 from config import PROD_URI, NY_OVERDOSE_DATA
 import logging
 import json

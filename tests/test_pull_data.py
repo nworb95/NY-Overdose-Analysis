@@ -1,4 +1,4 @@
-from src.pull_data import pull_socrata_data
+from src.pull_socrata_data import pull_socrata_data
 from models.ny_public_data import ParoleData
 from config import TEST_URI, TEST_OVERDOSE_DATA
 import json
