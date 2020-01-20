@@ -1,4 +1,3 @@
-from src.pull_socrata_data import pull_socrata_data
 import logging
 
 __author__ = "Emma Brown"
