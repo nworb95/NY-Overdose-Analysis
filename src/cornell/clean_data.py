@@ -33,3 +33,19 @@ def clean_projected_population_data(df):
     ).drop(["COUNTY", "SEXCODE", "SEX_DESCR", "AGEGRPCODE", "AGEGRP_DESCR", "RACECODE", "RACE_DESCR"], axis=1)
     clean_df['County'] = clean_df['County'] + ' County'
     return clean_df.reset_index().drop(['index'], axis=1)
+
+
+def merge_population_data(actual_df, projected_df):
+    df = pd.merge(actual_df, projected_df, on="County")
+    cols = [x for x in df.columns.tolist() if x != "County"]
+    for i in cols:
+        df[i] = df[i].astype(int)
+    missing_years = ["2011", "2012", "2013", "2014"]
+    big_df = pd.concat([df, pd.DataFrame(columns=missing_years)], sort=False)
+    for year in missing_years:
+        big_df[year] = pd.to_numeric(big_df[year], errors="coerce")
+    interpolate_df = big_df.drop('County', axis=1)
+    interpolated_df = interpolate_df.interpolate(method='akima', axis=1)
+    for year in missing_years:
+        interpolated_df[year] = interpolated_df[year].astype(float)
+    return pd.concat([big_df['County'], interpolated_df], axis=1)
