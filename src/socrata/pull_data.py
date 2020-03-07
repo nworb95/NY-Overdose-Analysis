@@ -36,7 +36,9 @@ def paginate_data(client, table, name):
     :return:
     """
     offset = 0  # make this len of table in db to only get new data
-    file_path = "/var/app/data/raw_data/{}/".format(name) # change these with config so you can seamlessly switch between local and docker testing
+    file_path = "/var/app/data/raw_data/{}/".format(
+        name
+    )  # change these with config so you can seamlessly switch between local and docker testing
     if not os.path.exists(file_path):
         os.mkdir(file_path)
     while client.get(table, limit=10000, offset=offset):
