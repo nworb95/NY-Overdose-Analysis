@@ -1,5 +1,6 @@
 from datetime import datetime
 import pandas as pd
+import dateutil
 
 
 def safe_date(date_value):
@@ -15,3 +16,8 @@ def safe_value(field_val):
 
 def filter_keys(document, use_these_keys):
     return {key: document[key] for key in use_these_keys}
+
+
+def format_year_column(data, column_name):
+    data[column_name] = data[column_name].apply(lambda x: dateutil.parser.parse(str(x)))
+    return data
