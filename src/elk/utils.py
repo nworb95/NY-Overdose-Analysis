@@ -5,8 +5,9 @@ import dateutil
 
 def safe_date(date_value):
     return (
-        pd.to_datetime(date_value) if not pd.isna(date_value)
-            else datetime(1970,1,1,0,0)
+        pd.to_datetime(date_value)
+        if not pd.isna(date_value)
+        else datetime(1970, 1, 1, 0, 0)
     )
 
 
