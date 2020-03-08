@@ -1,11 +1,11 @@
 from datetime import datetime
 import pandas as pd
-import dateutil
+from dateutil import parser
 
 
 def safe_date(date_value):
     return (
-        pd.to_datetime(date_value)
+        pd.to_datetime(date_value).isoformat()
         if not pd.isna(date_value)
         else datetime(1970, 1, 1, 0, 0)
     )
@@ -20,5 +20,7 @@ def filter_keys(document, use_these_keys):
 
 
 def format_year_column(data, column_name):
-    data[column_name] = data[column_name].apply(lambda x: dateutil.parser.parse(str(x)))
+    data[column_name] = data[column_name].apply(
+        lambda x: (parser.parse(str(x)).isoformat())
+    )
     return data

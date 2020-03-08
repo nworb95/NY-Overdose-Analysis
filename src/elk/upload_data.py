@@ -7,6 +7,7 @@ from elasticsearch import Elasticsearch, helpers
 fpath = "../../data/raw_data/recidivism_data_by_county/0.json"
 index = "recidivism_by_county"
 elk_url = "http://localhost:9200/{}".format(index)
+# data = utils.format_year_column(pd.read_json(fpath), "release_year")
 
 
 def post_to_es(df, index=index, server=elk_url, chunk_size=2000):
