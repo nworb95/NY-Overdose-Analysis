@@ -15,3 +15,9 @@ logging.basicConfig(
 
 if __name__ == "__main__":
     logging.info("Doing stuff!")
+    # Pull data IF NOT exists
+    # Cleans & normalizes by population
+    # uploads to elasticsearch
+    # (explore)
+    # linear regression
+    # export dashboard to host server -- heroku?
