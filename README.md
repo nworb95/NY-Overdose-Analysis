@@ -10,4 +10,4 @@ Inputs include public data source APIs to hit, and outputs will a Kibana dashboa
     * upload to elasticsearch
     * (explore)
     * linear regression
-    * export dashboard to host server -- heroku?
+    * export dashboard to host server` -- heroku?

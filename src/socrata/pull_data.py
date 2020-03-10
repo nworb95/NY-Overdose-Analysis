@@ -3,7 +3,7 @@ import os
 import re
 import json
 import pandas as pd
-from config import NY_OVERDOSE_DATA
+from src.socrata import NY_OVERDOSE_DATA
 from sodapy import Socrata
 
 
