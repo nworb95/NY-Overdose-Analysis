@@ -1,5 +1,5 @@
 NY_OVERDOSE_DATA = "data/ny_sources.json"
-TEST_OVERDOSE_DATA = "tests/test_ny_sources.json"
+TEST_OVERDOSE_DATA = "../ny_sources.json"
 
 overdose_table_mappings = {
     "active_construction_by_county": {
