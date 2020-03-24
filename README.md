@@ -9,5 +9,5 @@ Inputs include public data source APIs to hit, and outputs will a Kibana dashboa
     * Clean & normalize by population, impute missing numbers
     * upload to elasticsearch
     * (explore)
-    * linear regression
-    * export dashboard to host server` -- heroku?
+    * regress
+    * export dashboard to host server -- heroku?

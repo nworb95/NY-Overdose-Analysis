@@ -36,8 +36,6 @@ def paginate_data(client, table, name):
     :return:
     """
 
-    import pdb; pdb.set_trace()
-
     offset = 0  # make this len of table in db to only get new data
     file_path = "/var/app/data/raw_data/{}/".format(
         name
