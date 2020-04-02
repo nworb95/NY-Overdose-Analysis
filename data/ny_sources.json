@@ -1,4 +1,5 @@
 {
+    "https://health.data.ny.gov/resource/jr8b-6gh6.json": "infuenza_cases_by_county",
     "https://health.data.ny.gov/resource/du4z-hmkb.json": "medicaid_patient_visits_by_county",
     "https://health.data.ny.gov/resource/rv8x-4fm3.json": "inpatient_discharges_by_county",
     "https://health.data.ny.gov/resource/sn5m-dv52.json": "opioid_deaths_by_county",

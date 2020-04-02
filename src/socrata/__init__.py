@@ -72,9 +72,31 @@ overdose_table_mappings = (
                 "non_secure_unique_youth",
             ],
         },
-        "local_unemploymet_data_by_county": {
+        "local_unemployment_data_by_county": {
             "year": "year",
+            "month": "month",
             "population": ["laborforce", "employed", "unemployed"],
         },
+        "long_term_industry_projection_by_county": {
+            "year": ["base_year", "projected_year"]
+        },
+        "low_income_tax_credits_by_county": {
+            "year": "calendar_year",
+            "population": "affordable_units",
+        },
+        "medicaid_patient_visits_by_county": {
+            "year": "year",
+            "population": [
+                "ip_recips",
+                "ip_admits",
+                "ip_admits",
+                "er_recips",
+                "er_visits",
+            ],
+        },
+        "mined_land_data_by_county": {
+            "year": [],
+            "area": ["acres_controlled", "acres_life_of_mine", "acres_affected"]
+        }
     },
 )

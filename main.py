@@ -1,4 +1,5 @@
 import logging
+from src.socrata.pull_data import pull_socrata_data
 
 __author__ = "Emma Brown"
 __version__ = "0.1.0"
@@ -14,5 +15,6 @@ logging.basicConfig(
 
 
 if __name__ == "__main__":
-    logging.info("Doing stuff!")
+    logging.info("Pulling Socrata Data!")
+    pull_socrata_data()
 

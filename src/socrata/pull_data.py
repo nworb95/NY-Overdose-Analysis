@@ -2,6 +2,7 @@ import logging
 import os
 import re
 import json
+from glob import glob
 import pandas as pd
 from src.socrata import NY_OVERDOSE_DATA
 from sodapy import Socrata
@@ -28,6 +29,13 @@ def get_data(client, dataset_string, offset, limit=50000):
     return client.get(dataset_string, limit=limit, offset=offset)
 
 
+def get_table_length(table_dir):
+    json_paths = glob(table_dir + "*.json")
+    last_json = max([int(f.lstrip(table_dir).rstrip(".json")) for f in json_paths])
+    data = pd.read_json(table_dir + str(last_json) + ".json")
+    return len(data) + last_json
+
+
 def paginate_data(client, table, name):
     """
     :param client:
@@ -35,23 +43,25 @@ def paginate_data(client, table, name):
     :param table_name:
     :return:
     """
-
-    offset = 0  # make this len of table in db to only get new data
-    file_path = "/var/app/data/raw_data/{}/".format(
+    table_dir = "data/raw_data/{}/".format(
         name
     )  # change these with config so you can seamlessly switch between local and docker testing
-    if not os.path.exists(file_path):
-        os.mkdir(file_path)
+    if not os.path.exists(table_dir):
+        os.mkdir(table_dir)
+        offset = 0
+    else:
+        offset = get_table_length(table_dir)
+    client.timeout = 50
     while client.get(table, limit=10000, offset=offset):
         data = pd.DataFrame.from_records(get_data(client, table, offset))
         logging.info(data.head())
         try:
-            data.to_json(file_path + "{}.json".format(offset))
+            data.to_json(table_dir + "{}.json".format(offset))
         except Exception as e:
             logging.warning(e)
         offset += len(data)
         logging.info(
-            "Downloaded output to {}".format(file_path + "{}.json".format(offset))
+            "Downloaded output to {}".format(table_dir + "{}.json".format(offset))
         )
 
 
