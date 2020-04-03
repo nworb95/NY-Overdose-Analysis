@@ -1,6 +1,7 @@
 import logging
 from src.socrata.pull_data import pull_socrata_data
 
+
 __author__ = "Emma Brown"
 __version__ = "0.1.0"
 __license__ = "MIT"

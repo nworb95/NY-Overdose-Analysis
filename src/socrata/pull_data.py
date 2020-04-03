@@ -4,7 +4,7 @@ import re
 import json
 from glob import glob
 import pandas as pd
-from src.socrata import NY_OVERDOSE_DATA
+from src.socrata import NY_OVERDOSE_DATA, NY_DATA_DIR
 from sodapy import Socrata
 
 
@@ -43,9 +43,7 @@ def paginate_data(client, table, name):
     :param table_name:
     :return:
     """
-    table_dir = "data/raw_data/{}/".format(
-        name
-    )  # change these with config so you can seamlessly switch between local and docker testing
+    table_dir = f"{NY_DATA_DIR}{name}/"
     if not os.path.exists(table_dir):
         os.mkdir(table_dir)
         offset = 0

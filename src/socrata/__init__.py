@@ -1,7 +1,12 @@
-NY_OVERDOSE_DATA = "data/ny_sources.json"
-TEST_OVERDOSE_DATA = "../ny_sources.json"
+import os
 
-overdose_table_mappings = (
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__)).rstrip("src/socrata") + "s/"
+
+NY_OVERDOSE_DATA = ROOT_DIR + "data/ny_sources.json"
+NY_DATA_DIR = ROOT_DIR + "data/raw_data/"
+
+OVERDOSE_TABLE_MAPPINGS = (
     {
         "active_construction_by_county": {
             "year": ["construction_completion_date", "construction_start_date"]
