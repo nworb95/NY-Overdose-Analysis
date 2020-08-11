@@ -115,3 +115,4 @@ COUNTY_LIST = [
     121,
     123,
 ]
+CORNELL_HISTORICAL_DATA_URL = "https://labor.ny.gov/stats/nys/CO-EST00INT-01-36.xlsx"

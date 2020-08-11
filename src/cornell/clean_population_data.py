@@ -53,9 +53,6 @@ def format_population_data(merged_df: pd.DataFrame):
     :param merged_df:
     :return:
     """
-    import pdb
-
-    pdb.set_trace()
     cols = [x for x in merged_df.columns.tolist() if x != "County"]
     for i in cols:
         merged_df[i] = merged_df[i].astype(int)

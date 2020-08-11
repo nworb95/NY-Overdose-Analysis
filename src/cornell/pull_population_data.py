@@ -5,7 +5,7 @@ import requests
 import logging
 from datetime import datetime
 
-from src.cornell.constants import COUNTY_LIST
+from src.cornell.constants import COUNTY_LIST, CORNELL_HISTORICAL_DATA_URL
 from src.cornell.clean_population_data import (
     clean_historical_population_data,
     clean_projected_population_data,
@@ -28,23 +28,27 @@ formatter = logging.Formatter(cornell_log_format)
 console.setFormatter(formatter)
 logging.getLogger("").addHandler(console)
 
+CORNELL_PROJECTED_DATA_URL =
 
 def get_historical_population_data():
+    logging.info(f"Getting historical population data from {CORNELL_HISTORICAL_DATA_URL}!")
     return pd.read_excel(
         BytesIO(
             requests.get(
-                "https://labor.ny.gov/stats/nys/CO-EST00INT-01-36.xlsx"
+                CORNELL_HISTORICAL_DATA_URL
             ).content
         ),
         skiprows=3,
     )[:-8]
 
 
-def cache_historical_population_data(df):
+def cache_historical_population_data(df: pd.DataFrame):
+    logging.info("Caching historical population data!")
     df.to_json("./data/cache/actual_ny_population_data.json")
 
 
 def pull_historical_population_data():
+    logging.info("Pulling historical data!")
     df = get_historical_population_data()
     clean_df = clean_historical_population_data(df)
     cache_historical_population_data(clean_df)
