@@ -3,9 +3,9 @@ from io import BytesIO
 import pandas as pd
 import requests
 
-from src.cornell import county_list
-from src.cornell.clean_data import (
-    clean_actual_population_data,
+from src.cornell.constants import COUNTY_LIST
+from src.cornell.clean_population_data import (
+    clean_historical_population_data,
     clean_projected_population_data,
 )
 
@@ -27,14 +27,14 @@ def cache_actual_population_data(df):
 
 def pull_actual_population_data():
     df = get_actual_population_data()
-    clean_df = clean_actual_population_data(df)
+    clean_df = clean_historical_population_data(df)
     cache_actual_population_data(clean_df)
     return clean_df
 
 
 def get_projected_population_data():
     projection_df_list = []
-    for request in county_list:
+    for request in COUNTY_LIST:
         projection_df_list.append(
             pd.read_excel(
                 BytesIO(
