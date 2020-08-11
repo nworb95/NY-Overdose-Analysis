@@ -28,7 +28,7 @@ formatter = logging.Formatter(cornell_log_format)
 console.setFormatter(formatter)
 logging.getLogger("").addHandler(console)
 
-CORNELL_PROJECTED_DATA_URL =
+CORNELL_PROJECTED_DATA_URL = ""
 
 def get_historical_population_data():
     logging.info(f"Getting historical population data from {CORNELL_HISTORICAL_DATA_URL}!")
