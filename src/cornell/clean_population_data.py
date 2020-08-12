@@ -64,7 +64,9 @@ def interpolate_missing_data(formatted_df: pd.DataFrame):
     :param formatted_df:
     :return:
     """
-    big_df = pd.concat([formatted_df, pd.DataFrame(columns=MISSING_POPULATION_YEARS)], sort=False)
+    big_df = pd.concat(
+        [formatted_df, pd.DataFrame(columns=MISSING_POPULATION_YEARS)], sort=False
+    )
     for year in MISSING_POPULATION_YEARS:
         big_df[year] = pd.to_numeric(big_df[year], errors="coerce")
     sorted_df = big_df[big_df.columns.sort_values()]

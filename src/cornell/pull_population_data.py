@@ -5,12 +5,17 @@ import requests
 import logging
 import os
 
-from src.cornell.constants import COUNTY_LIST, HISTORICAL_DATA_URL, PROJECTED_DATA_UNFORMATTED_URL, \
-    HISTORICAL_POPULATION_DATA_CACHE, PROJECTED_POPULATION_DATA_CACHE
+from src.cornell.constants import (
+    COUNTY_LIST,
+    HISTORICAL_DATA_URL,
+    PROJECTED_DATA_UNFORMATTED_URL,
+    HISTORICAL_POPULATION_DATA_CACHE,
+    PROJECTED_POPULATION_DATA_CACHE,
+)
 from src.cornell.clean_population_data import (
     clean_historical_population_data,
     clean_projected_population_data,
-    merge_population_data
+    merge_population_data,
 )
 
 if not os.path.exists("data/cornell_population_data"):
@@ -28,17 +33,14 @@ def check_for_projected_population_data():
 def get_historical_population_data():
     logging.info(f"Getting historical population data from {HISTORICAL_DATA_URL}!")
     return pd.read_excel(
-        BytesIO(
-            requests.get(
-                HISTORICAL_DATA_URL
-            ).content
-        ),
-        skiprows=3,
+        BytesIO(requests.get(HISTORICAL_DATA_URL).content), skiprows=3,
     )[:-8]
 
 
 def cache_historical_population_data(df: pd.DataFrame):
-    logging.info(f"Caching historical population data! :: {HISTORICAL_POPULATION_DATA_CACHE}")
+    logging.info(
+        f"Caching historical population data! :: {HISTORICAL_POPULATION_DATA_CACHE}"
+    )
     df.to_json(HISTORICAL_POPULATION_DATA_CACHE)
 
 
@@ -52,18 +54,16 @@ def pull_historical_population_data():
 
 
 def get_projected_population_data():
-    logging.info(f"Getting projected population data from {PROJECTED_DATA_UNFORMATTED_URL}")
+    logging.info(
+        f"Getting projected population data from {PROJECTED_DATA_UNFORMATTED_URL}"
+    )
     projection_df_list = []
     for request in COUNTY_LIST:
         logging.info(f"Pulling data for {request}!")
         projection_df_list.append(
             pd.read_excel(
                 BytesIO(
-                    requests.get(
-                        PROJECTED_DATA_UNFORMATTED_URL.format(
-                            request
-                        )
-                    ).content
+                    requests.get(PROJECTED_DATA_UNFORMATTED_URL.format(request)).content
                 )
             )
         )
@@ -71,7 +71,9 @@ def get_projected_population_data():
 
 
 def cache_projected_population_data(df: pd.DataFrame):
-    logging.info(f"Caching projected population data! :: {PROJECTED_POPULATION_DATA_CACHE}")
+    logging.info(
+        f"Caching projected population data! :: {PROJECTED_POPULATION_DATA_CACHE}"
+    )
     df.to_json(PROJECTED_POPULATION_DATA_CACHE)
 
 
