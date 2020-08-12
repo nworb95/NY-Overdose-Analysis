@@ -1,21 +1,32 @@
 import logging
+from datetime import datetime
+
 from src.socrata.pull_data import pull_socrata_data
+from src.cornell import pull_cornell_population_data
 
 
 __author__ = "Emma Brown"
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __license__ = "MIT"
 
+LOG_FORMAT = "%(asctime)s - %(message)s"
 logging.basicConfig(
-    # filemode="w",
-    # filename="/var/app/logs/data_pull.log",
-    format="%(asctime)s: %(message)s",
+    filemode="w",
+    filename=f"logs/{datetime.now().strftime('%Y_%m_%d')}_data_pull.log",
+    format=LOG_FORMAT,
     level=logging.INFO,
     datefmt="%H:%M:%S",
 )
 
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+formatter = logging.Formatter(LOG_FORMAT)
+console.setFormatter(formatter)
+logging.getLogger("").addHandler(console)
+
 
 if __name__ == "__main__":
+    logging.info("Pulling Cornell Data!")
+    population_data = pull_cornell_population_data()
     logging.info("Pulling Socrata Data!")
-    pull_socrata_data()
-
+    economic_data = pull_socrata_data()

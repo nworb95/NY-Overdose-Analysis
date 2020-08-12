@@ -1,26 +1,25 @@
 import pandas as pd
+import numpy as np
+import datetime as dt
 import logging
 
 from src.cornell.constants import (
-    CORNELL_PROJECTED_DROP_COLUMNS,
-    CORNELL_HISTORICAL_POPULATION_COLUMNS,
-    CORNELL_PROJECTED_POPULATION_COLUMNS,
-    CORNELL_MISSING_POPULATION_YEARS,
+    PROJECTED_DROP_COLUMNS,
+    HISTORICAL_POPULATION_COLUMNS,
+    PROJECTED_POPULATION_COLUMNS,
+    MISSING_POPULATION_YEARS,
 )
 
 
 def clean_historical_population_data(df: pd.DataFrame):
-    """Cleans historical population data from Cornell.  Excludes
+    """
+    Cleans historical population data from Cornell.  Excludes
     New York City.
-
-    Args:
-        df (pd.DataFrame): dirty data
-
-    Returns:
-        pd.DataFrame: clean data
+    :param df: dirty data
+    :return: clean data
     """
     logging.info("Cleaning historical data!")
-    df = df.rename(columns=CORNELL_HISTORICAL_POPULATION_COLUMNS).drop(
+    df = df.rename(columns=HISTORICAL_POPULATION_COLUMNS).drop(
         ["Unnamed: 1", "Unnamed: 12"], axis=1
     )
     df["County"] = df["County"].str.replace(".", "")
@@ -40,8 +39,8 @@ def clean_projected_population_data(df: pd.DataFrame):
 
     logging.info("Cleaning projected data!")
     filtered_df = df[(df["SEX_DESCR"] == "All") & (df["AGEGRP_DESCR"] == "Total")]
-    clean_df = filtered_df.rename(columns=CORNELL_PROJECTED_POPULATION_COLUMNS).drop(
-        CORNELL_PROJECTED_DROP_COLUMNS, axis=1,
+    clean_df = filtered_df.rename(columns=PROJECTED_POPULATION_COLUMNS).drop(
+        PROJECTED_DROP_COLUMNS, axis=1,
     )
     clean_df["County"] = clean_df["County"] + " County"
     return clean_df.reset_index().drop(["index"], axis=1)
@@ -65,12 +64,20 @@ def interpolate_missing_data(formatted_df: pd.DataFrame):
     :param formatted_df:
     :return:
     """
-    big_df = pd.concat([formatted_df, pd.DataFrame(columns=CORNELL_MISSING_POPULATION_YEARS)], sort=False)
-    for year in CORNELL_MISSING_POPULATION_YEARS:
+    big_df = pd.concat([formatted_df, pd.DataFrame(columns=MISSING_POPULATION_YEARS)], sort=False)
+    for year in MISSING_POPULATION_YEARS:
         big_df[year] = pd.to_numeric(big_df[year], errors="coerce")
-    interpolate_df = big_df.drop("County", axis=1)
-    interpolated_df = interpolate_df.interpolate(method="akima", axis=1)
-    for year in CORNELL_MISSING_POPULATION_YEARS:
+    sorted_df = big_df[big_df.columns.sort_values()]
+    transpose_df = sorted_df.transpose()
+    transpose_df.columns = transpose_df.iloc[-1]
+    transpose_df = transpose_df.iloc[:-1]
+    for col in transpose_df:
+        transpose_df[col] = pd.to_numeric(transpose_df[col], errors="coerce")
+    transpose_df.index = transpose_df.index.map(np.datetime64)
+    interpolated_df = transpose_df.interpolate(method="akima")
+    interpolated_df.index = interpolated_df.index.strftime("%Y")
+    interpolated_df = interpolated_df.transpose()
+    for year in MISSING_POPULATION_YEARS:
         interpolated_df[year] = interpolated_df[year].astype(float)
     full_df = pd.concat([big_df["County"], interpolated_df], axis=1)
     return full_df
@@ -86,6 +93,7 @@ def merge_population_data(historical_df: pd.DataFrame, projected_df: pd.DataFram
     Returns:
         pd.DataFrame: clean population data
     """
+    logging.info("Merging population data!")
     df = pd.merge(historical_df, projected_df, on="County")
     formatted_df = format_population_data(df)
     interpolated_df = interpolate_missing_data(formatted_df)

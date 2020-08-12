@@ -117,3 +117,5 @@ COUNTY_LIST = [
 ]
 HISTORICAL_DATA_URL = "https://labor.ny.gov/stats/nys/CO-EST00INT-01-36.xlsx"
 PROJECTED_DATA_UNFORMATTED_URL = "https://pad.human.cornell.edu/counties/expprojdata.cfm?county={}"
+HISTORICAL_POPULATION_DATA_CACHE = "data/cornell_population_data/historical_ny_population_data.json"
+PROJECTED_POPULATION_DATA_CACHE = "data/cornell_population_data/projected_ny_population_data.json"
