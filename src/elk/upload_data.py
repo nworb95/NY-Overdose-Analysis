@@ -20,10 +20,10 @@ def post_to_es(df, index_name, chunk_size=2000):
     ]
     i = 0
     while i < len(actions):
-        serverAPI = server + "/_bulk"
+        server_api = server + "/_bulk"
         data = "\n".join(actions[i : min([i + chunk_size, len(actions)])])
         data = data + "\n"
-        r = requests.post(serverAPI, data=data, headers=headers)
+        r = requests.post(server_api, data=data, headers=headers)
         print(r.content)
         i = i + chunk_size
 

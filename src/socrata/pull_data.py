@@ -8,7 +8,7 @@ from src.socrata import NY_OVERDOSE_DATA, NY_DATA_DIR
 from sodapy import Socrata
 
 
-def get_dataset_string(json_string):
+def get_dataset_string(json_string: str):
     """
 
     :param json_string:

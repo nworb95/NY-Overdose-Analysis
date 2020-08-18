@@ -101,43 +101,39 @@ OVERDOSE_TABLE_MAPPINGS = (
         },
         "mined_land_data_by_county": {
             "year": [],
-            "area": ["acres_controlled", "acres_life_of_mine", "acres_affected",
-                     "acres_reclaimed", "acresbb", "acresbb_range"]
+            "area": [
+                "acres_controlled",
+                "acres_life_of_mine",
+                "acres_affected",
+                "acres_reclaimed",
+                "acresbb",
+                "acresbb_range",
+            ],
         },
         "ny_state_career_centers": {},
-        "oil_gas_production_data_by_county": {
-            "year": "year"
-        },
+        "oil_gas_production_data_by_county": {"year": "year"},
         "opioid_deaths_by_county": {
             "year": "year",
-            "population": "opioid_poisoning_deaths"
+            "population": "opioid_poisoning_deaths",
         },
         "overall_employment_data_by_county": {
             "year": "year",
-            "population": "current_employment"
+            "population": "current_employment",
         },
-        "parole_data_by_county": {
-            "year": "snapshot_year"
-        },
-        "recidivism_data_by_county": {
-            "year": "release_year"
-        },
+        "parole_data_by_county": {"year": "snapshot_year"},
+        "recidivism_data_by_county": {"year": "release_year"},
         "short_term_industry_projection_by_county": {
             "year": "period",
             "population": [
                 "base_year_employment_estimate",
                 "projected_year_employment_estimate",
-                "net_change"
-            ]
+                "net_change",
+            ],
         },
-        "swm_data_by_county": {
-            "year": "expiration_date"
-        },
-        "unemployment_avg_duration_by_county": {
-            "year": "year"
-        },
+        "swm_data_by_county": {"year": "expiration_date"},
+        "unemployment_avg_duration_by_county": {"year": "year"},
         "union_compensation_claims_by_county": {
             "year": ["accident_date", "anrc_date", "assembly_date", "first_appeal_date"]
-        }
+        },
     },
 )
