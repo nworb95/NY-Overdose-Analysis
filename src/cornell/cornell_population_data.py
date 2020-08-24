@@ -71,7 +71,7 @@ class CornellPopulationData:
     @staticmethod
     def _cache_population_data(data: pd.DataFrame, datatype: str):
         logging.info(
-            f"Caching historical population data! :: {POPULATION_DATA_CACHE % datatype}"
+            f"Caching population data! :: {POPULATION_DATA_CACHE % datatype}"
         )
         data.to_json(POPULATION_DATA_CACHE % datatype)
 
