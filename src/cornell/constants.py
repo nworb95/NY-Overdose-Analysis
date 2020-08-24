@@ -7,6 +7,7 @@ PROJECTED_DROP_COLUMNS = [
     "RACECODE",
     "RACE_DESCR",
 ]
+
 HISTORICAL_POPULATION_COLUMNS = {
     "Unnamed: 0": "County",
     "Unnamed: 13": "2010",
@@ -21,6 +22,7 @@ HISTORICAL_POPULATION_COLUMNS = {
     2008: "2008",
     2009: "2009",
 }
+
 PROJECTED_POPULATION_COLUMNS = {
     "COUNTY_DESCR": "County",
     "YR_2015": "2015",
@@ -50,7 +52,9 @@ PROJECTED_POPULATION_COLUMNS = {
     "YR_2039": "2039",
     "YR_2040": "2040",
 }
+
 MISSING_POPULATION_YEARS = ["2011", "2012", "2013", "2014"]
+
 COUNTY_LIST = [
     1,
     3,
@@ -115,13 +119,10 @@ COUNTY_LIST = [
     121,
     123,
 ]
+
 HISTORICAL_DATA_URL = "https://labor.ny.gov/stats/nys/CO-EST00INT-01-36.xlsx"
+
 PROJECTED_DATA_UNFORMATTED_URL = (
     "https://pad.human.cornell.edu/counties/expprojdata.cfm?county={}"
 )
-HISTORICAL_POPULATION_DATA_CACHE = (
-    "data/cornell_population_data/historical_ny_population_data.json"
-)
-PROJECTED_POPULATION_DATA_CACHE = (
-    "data/cornell_population_data/projected_ny_population_data.json"
-)
+POPULATION_DATA_CACHE = "src/cornell/data/cornell_population_data/%s_ny_population_data.json"

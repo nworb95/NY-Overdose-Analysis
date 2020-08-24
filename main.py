@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 
 from src.socrata.pull_data import pull_socrata_data
-from src.cornell import pull_cornell_population_data
+from src.cornell import CornellPopulationData
 
 
 __author__ = "Emma Brown"
@@ -27,6 +27,6 @@ logging.getLogger("").addHandler(console)
 
 if __name__ == "__main__":
     logging.info("Pulling Cornell Data!")
-    population_data = pull_cornell_population_data()
+    population_data = CornellPopulationData()
     logging.info("Pulling Socrata Data!")
     economic_data = pull_socrata_data()
