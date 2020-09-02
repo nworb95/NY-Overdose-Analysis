@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from src.socrata.pull_data import pull_socrata_data
+from src.socrata.socrata_economic_data import pull_socrata_data
 from src.cornell import CornellPopulationData
 
 

@@ -2,8 +2,9 @@ import os
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__)).rstrip("src/socrata") + "s/"
 NY_OVERDOSE_DATA = ROOT_DIR + "src/socrata/assets/ny_sources.json"
-NY_DATA_DIR = ROOT_DIR + "data/raw_data/"
-OVERDOSE_TABLE_MAPPINGS = (
+NY_DATA_DIR = ROOT_DIR + "data/socrata_economic_data/"
+
+SOCRATA_TABLE_MAPPINGS = (
     {
         "active_construction_by_county": {
             "year": ["construction_completion_date", "construction_start_date"]
