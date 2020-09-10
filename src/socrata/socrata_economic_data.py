@@ -13,13 +13,14 @@ class SocrataEconomicData:
     def __init__(self):
         with open(NY_OVERDOSE_DATA, "r") as f:
             self._table_name_mapping = json.load(f)
-        self._ny_state_data_client = Socrata("data.ny.gov", os.environ["SOCRATA_TOKEN"], timeout=30),
-        self._ny_health_data_client = Socrata("health.data.ny.gov", os.environ["SOCRATA_TOKEN"], timeout=30)
+        self._ny_state_data_client = Socrata("data.ny.gov", os.environ["SOCRATA_TOKEN"], timeout=100)
+        self._ny_health_data_client = Socrata("health.data.ny.gov", os.environ["SOCRATA_TOKEN"], timeout=100)
         logging.info("Connected to Socrata clients!")
         for url, name in self._table_name_mapping.items():
             self._download_data(url, name)
         self._ny_health_data_client.close()
         self._ny_health_data_client.close()
+        logging.info("Economic data updated!")
 
         # TODO setattr each data table as a pd.read_json?
         # add constant with get all datasets method

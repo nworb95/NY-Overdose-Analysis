@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from src.socrata.socrata_economic_data import pull_socrata_data
+from src.socrata.socrata_economic_data import SocrataEconomicData
 from src.cornell import CornellPopulationData
 
 
@@ -29,4 +29,4 @@ if __name__ == "__main__":
     logging.info("Pulling Cornell Data!")
     population_data = CornellPopulationData()
     logging.info("Pulling Socrata Data!")
-    economic_data = pull_socrata_data()
+    economic_data = SocrataEconomicData()
