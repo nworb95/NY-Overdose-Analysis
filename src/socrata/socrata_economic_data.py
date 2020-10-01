@@ -5,7 +5,9 @@ import json
 from glob import glob
 import pandas as pd
 from sodapy import Socrata
+from requests.exceptions import ReadTimeout
 
+from src.utils.retry import retry
 from src.socrata.constants import NY_OVERDOSE_DATA, NY_DATA_DIR
 
 
@@ -43,6 +45,7 @@ class SocrataEconomicData:
         logging.info("Downloading table: %s", table_description)
         self._paginate_data(client, table_string, name)
 
+    @retry(ReadTimeout)
     def _paginate_data(self, client, table, name):
         """
         :param client:
