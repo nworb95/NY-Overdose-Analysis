@@ -92,8 +92,3 @@ class SocrataEconomicData:
     @staticmethod
     def _get_all_tables():
         return next(os.walk(NY_DATA_DIR))[1]
-
-
-
-
-

@@ -5,6 +5,8 @@ import requests
 import logging
 import os
 
+from requests.exceptions import ReadTimeout
+from src.utils.retry import retry
 from src.cornell.constants import (
     COUNTY_LIST,
     HISTORICAL_DATA_URL,
@@ -16,6 +18,8 @@ from src.cornell.utils import (
     clean_projected_population_data,
     merge_population_data,
 )
+
+# TODO add multithreading for county data
 
 
 class CornellPopulationData:
@@ -42,6 +46,7 @@ class CornellPopulationData:
         self._cache_population_data(data=clean_projected_data, datatype="projected")
         return clean_projected_data
 
+    @retry(ReadTimeout)
     def _pull_historical_population_data(self):
         logging.info(f"Getting historical population data from {HISTORICAL_DATA_URL}!")
         data = pd.read_excel(
