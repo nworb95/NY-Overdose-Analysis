@@ -1,8 +1,5 @@
-import os
-
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__)).rstrip("src/socrata") + "s/"
-NY_OVERDOSE_DATA = ROOT_DIR + "src/socrata/assets/ny_sources.json"
-NY_DATA_DIR = ROOT_DIR + "data/socrata_economic_data/"
+NY_OVERDOSE_DATA = "/apps/src/socrata/assets/ny_sources.json"
+NY_DATA_DIR = "/apps/data/socrata_economic_data/"
 
 SOCRATA_TABLE_MAPPINGS = (
     {
