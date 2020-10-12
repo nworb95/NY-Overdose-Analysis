@@ -5,7 +5,7 @@ import pandas as pd
 
 import src.elk.utils as utils
 
-file_path = "../../data/raw_data/recidivism_data_by_county/0.json"
+file_path = "../../data/socrata_economic_data/recidivism_data_by_county/0.json"
 index = "recidivism_by_county"
 column = "release_year"
 
@@ -30,9 +30,6 @@ def post_to_es(df, index_name, chunk_size=2000):
 
 def doc_generator(df, index_name):
     df_gen = df.iterrows()
-    import pdb
-
-    pdb.set_trace()
     for index, document in df_gen:
         yield {
             "_index": index_name,
