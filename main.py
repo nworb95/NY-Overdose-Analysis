@@ -30,3 +30,4 @@ if __name__ == "__main__":
     population_data = CornellPopulationData()
     logging.info("Pulling Socrata Data!")
     economic_data = SocrataEconomicData()
+    import pdb; pdb.set_trace()

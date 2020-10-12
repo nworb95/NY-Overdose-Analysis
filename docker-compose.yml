@@ -11,10 +11,3 @@ services:
       - "./logs:/var/app/logs"
     environment:
       - SOCRATA_TOKEN
-
-volumes:
-  logs:
-  output:
-  data:
-    driver: local
-
