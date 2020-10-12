@@ -15,6 +15,8 @@ class SocrataEconomicData:
     def __init__(self):
         with open(NY_OVERDOSE_DATA, "r") as f:
             self._table_name_mapping = json.load(f)
+        if not os.path.exists(NY_DATA_DIR):
+            os.mkdir(NY_DATA_DIR)
         self._ny_state_data_client = Socrata("data.ny.gov", os.environ["SOCRATA_TOKEN"], timeout=100)
         self._ny_health_data_client = Socrata("health.data.ny.gov", os.environ["SOCRATA_TOKEN"], timeout=100)
         logging.info("Connected to Socrata clients!")

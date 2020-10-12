@@ -24,10 +24,10 @@ formatter = logging.Formatter(LOG_FORMAT)
 console.setFormatter(formatter)
 logging.getLogger("").addHandler(console)
 
+# Todo add logging ala grimoirelabs + flask mega tutorial rotating file handler
 
 if __name__ == "__main__":
     logging.info("Pulling Cornell Data!")
     population_data = CornellPopulationData()
     logging.info("Pulling Socrata Data!")
     economic_data = SocrataEconomicData()
-    import pdb; pdb.set_trace()
