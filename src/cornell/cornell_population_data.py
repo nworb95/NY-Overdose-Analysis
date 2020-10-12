@@ -19,6 +19,8 @@ from src.cornell.utils import (
     merge_population_data,
 )
 
+# TODO add multithreading for county data
+
 
 class CornellPopulationData:
     def __init__(self):
