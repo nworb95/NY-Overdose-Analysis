@@ -1,18 +1,14 @@
 import pandas as pd
 from glob import glob
-import bokeh
 
-from bokeh.io import show
 from bokeh.models import LogColorMapper
 from bokeh.palettes import Viridis6 as palette
-from bokeh.plotting import figure
 from bokeh.plotting import figure, output_file, show
 
 # bokeh.sampledata.download()
 
 from bokeh.sampledata.us_counties import data as counties
-from bokeh.sampledata.unemployment import data as unemployment
-from src.cornell.cornell_population_data import CornellPopulationData
+from cornell.cornell_population_data import CornellPopulationData
 
 TOOLS = "pan,wheel_zoom,reset,hover,save"
 
@@ -27,20 +23,23 @@ data_list = []
 for f_name in glob('./data/socrata_economic_data/opioid_deaths_by_county/*.json'):
     data_list.append(pd.read_json(f_name))
 data = pd.concat(data_list)
+data.year = data.year.astype(str)
+data.county = data.county + ' County'
 filtered_data = data[data['year'] == data.year.unique()[-1]]
-
 population_data = CornellPopulationData().merged_data
+melted_population_data = population_data.reset_index().melt(['County']).rename(columns={'variable': 'year', 'County': 'county'})
+filtered_population_data = melted_population_data[(melted_population_data['year'] <= max(data.year)) & (melted_population_data['year'] >= min(data.year))]
+merged_data = filtered_population_data.merge(data, how='left', on=['county', 'year']).rename(columns={'value': 'population'})
+merged_data['overdose_rate'] = ((merged_data['opioid_poisoning_deaths'] / merged_data['population']) * 100)
 
-unemployment_rates = [unemployment[county_id] for county_id in counties]
-opioid_rates = filtered_data.sort_values(by="county")['opioid_poisoning_deaths'].tolist()
+overdose_rates = [round(float(value), 3) for value in merged_data[merged_data['year'] == merged_data.year.max()].sort_values(by="county")['overdose_rate']]
 
 data_dict = dict(
     x=[county["lons"] for county in counties.values()],
     y=[county["lats"] for county in counties.values()],
     name=[county['name'] for county in counties.values()],
-    rate=opioid_rates
+    rate=overdose_rates
 )
-
 
 p = figure(
     title="New York Overdose Deaths", tools=TOOLS,
