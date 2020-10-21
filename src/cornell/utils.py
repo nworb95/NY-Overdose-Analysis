@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import logging
 
-from src.cornell.constants import (
+from cornell.constants import (
     PROJECTED_DROP_COLUMNS,
     HISTORICAL_POPULATION_COLUMNS,
     PROJECTED_POPULATION_COLUMNS,
@@ -88,7 +88,7 @@ def interpolate_missing_data(formatted_df: pd.DataFrame):
     interpolated_df = interpolated_df.transpose()
     for year in MISSING_POPULATION_YEARS:
         interpolated_df[year] = interpolated_df[year].astype(float)
-    return pd.concat([big_df["County"], interpolated_df], axis=1)
+    return interpolated_df
 
 
 def merge_population_data(historical_df: pd.DataFrame, projected_df: pd.DataFrame):

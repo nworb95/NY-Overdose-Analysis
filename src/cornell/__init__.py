@@ -1,1 +1,1 @@
-from src.cornell.cornell_population_data import CornellPopulationData
+from cornell.cornell_population_data import CornellPopulationData

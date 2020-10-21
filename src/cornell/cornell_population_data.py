@@ -6,14 +6,14 @@ import logging
 import os
 
 from requests.exceptions import ReadTimeout
-from src.utils.retry import retry
-from src.cornell.constants import (
+from utils.retry import retry
+from cornell.constants import (
     COUNTY_LIST,
     HISTORICAL_DATA_URL,
     PROJECTED_DATA_UNFORMATTED_URL,
     POPULATION_DATA_CACHE,
 )
-from src.cornell.utils import (
+from cornell.utils import (
     clean_historical_population_data,
     clean_projected_population_data,
     merge_population_data,
