@@ -1,8 +1,8 @@
 import pandas as pd
 from glob import glob
 
-from bokeh.models import LogColorMapper
-from bokeh.palettes import Viridis6 as palette
+from bokeh.models import LinearColorMapper as Mapper
+from bokeh.palettes import Magma256 as Palette
 from bokeh.plotting import figure, output_file, show
 
 # bokeh.sampledata.download()
@@ -10,13 +10,15 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.sampledata.us_counties import data as counties
 from cornell.cornell_population_data import CornellPopulationData
 
+# TODO add year dimension to chart
+
 TOOLS = "pan,wheel_zoom,reset,hover,save"
 
 counties = {
     code: county for code, county in counties.items() if county["state"] == "ny"
 }
 
-color_mapper = LogColorMapper(palette=tuple(reversed(palette)))
+color_mapper = Mapper(palette=tuple(reversed(Palette)))
 output_file("index.html")
 
 data_list = []
