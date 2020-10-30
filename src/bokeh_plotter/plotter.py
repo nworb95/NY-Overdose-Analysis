@@ -5,9 +5,13 @@ from bokeh.models import LinearColorMapper as Mapper
 from bokeh.palettes import Magma256 as Palette
 from bokeh.plotting import figure, output_file, show
 
-# bokeh.sampledata.download()
+try:
+    from bokeh.sampledata.us_counties import data as counties
+except:
+    import bokeh
+    bokeh.sampledata.download()
+    from bokeh.sampledata.us_counties import data as counties
 
-from bokeh.sampledata.us_counties import data as counties
 from cornell.cornell_population_data import CornellPopulationData
 
 # TODO add year dimension to chart
