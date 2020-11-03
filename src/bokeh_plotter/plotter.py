@@ -23,7 +23,7 @@ counties = {
 }
 
 color_mapper = Mapper(palette=tuple(reversed(Palette)))
-output_file("index.html")
+output_file("src/bokeh_plotter/index.html")
 
 data_list = []
 for f_name in glob('./data/socrata_economic_data/opioid_deaths_by_county/*.json'):
@@ -48,7 +48,8 @@ data_dict = dict(
 )
 
 p = figure(
-    title="New York Overdose Deaths", tools=TOOLS,
+    title="New York Overdose Deaths by County", tools=TOOLS,
+    plot_height=400,
     x_axis_location=None, y_axis_location=None,
     tooltips=[
         ("Name", "@name"), ("Overdose Deaths", "@rate%"), ("(Long, Lat)", "($x, $y)")
@@ -59,4 +60,9 @@ p.hover.point_policy = "follow_mouse"
 p.patches('x', 'y', source=data_dict,
           fill_color={'field': 'rate', 'transform': color_mapper},
           fill_alpha=0.7, line_color="white", line_width=0.5)
-show(p)
+
+p.title.text_font = 'Helvetica'
+p.title.text_font_size = '16pt'
+p.title.align = 'center'
+p.title.text_font_style = 'bold italic'
+p.sizing_mode = 'scale_width'
