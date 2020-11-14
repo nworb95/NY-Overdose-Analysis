@@ -17,9 +17,12 @@ make docker-run
 # TODOs
     * clean and normalize by population
     * set up sqlalchemy model
+    * set up migrations
     * analyze
     * hypothesize
     * export to bokeh viz
+    * embed on pages
+    * write blurb?  self-updating?
 
 # Front End Version 1
 ![front end 1](/assets/front-end-1.jpg)

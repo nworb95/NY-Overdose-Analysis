@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-6">
+                <p>This is where my journalism will go.</p>
+            </div>
+            <div class="col-6">
+                {{ div_survived_chart | safe }}
+            </div>
+        </div>
+        <div class="row mt-5">
+            {{ div_title_chart | safe }}
+        </div>
+        <div class="row mt-5">
+            {{ div_hist_age | safe }}
+        </div>
+    </div>
+
+    {{ script_survived_chart | safe }}
+    {{ script_title_chart | safe }}
+    {{ script_hist_age | safe }}
+
+{% endblock %}

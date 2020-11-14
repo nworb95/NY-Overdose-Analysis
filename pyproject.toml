@@ -4,6 +4,13 @@ version = "0.1.0"
 description = "data journalism framework"
 authors = ["Emma Brown <nworb95@gmail.com>"]
 license = "MIT"
+packages = [
+    { from = "src", include = "app"},
+    { from = "src", include = "bokeh_plotter"},
+    { from = "src", include = "cornell"},
+    { from = "src", include = "socrata"},
+    { from = "src", include = "utils"}
+]
 
 [tool.poetry.dependencies]
 python = ">=3.6.1,<4"
