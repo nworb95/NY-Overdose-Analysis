@@ -21,6 +21,9 @@ make docker-run
     * hypothesize
     * export to bokeh viz
 
+# Front End Version 1
+![front end 1](/assets/front-end-1.jpg)
+
 # Database Structure Version 1
 
 ![db structure 1](/assets/db-1.png)
