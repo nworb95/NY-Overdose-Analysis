@@ -16,6 +16,7 @@ make docker-run
 
 # TODOs
     * clean and normalize by population
+    * scrap the exploratory functionality in the pull data classes, keep it simple
     * set up sqlalchemy model
     * set up migrations
     * analyze
