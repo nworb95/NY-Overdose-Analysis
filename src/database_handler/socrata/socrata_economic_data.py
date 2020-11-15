@@ -7,8 +7,10 @@ import pandas as pd
 from sodapy import Socrata
 from requests.exceptions import ReadTimeout
 
-from src.utils.retry import retry
-from src.socrata.constants import NY_OVERDOSE_DATA, NY_DATA_DIR
+from database_handler.utils.retry import retry
+from database_handler.socrata.constants import NY_OVERDOSE_DATA, NY_DATA_DIR
+
+logger = logging.getLogger(__name__)
 
 
 class SocrataEconomicData:
@@ -16,18 +18,17 @@ class SocrataEconomicData:
         with open(NY_OVERDOSE_DATA, "r") as f:
             self._table_name_mapping = json.load(f)
         if not os.path.exists(NY_DATA_DIR):
+            logger.info("Socrata data directory doesn't exist -- creating now")
             os.mkdir(NY_DATA_DIR)
         self._ny_state_data_client = Socrata("data.ny.gov", os.environ["SOCRATA_TOKEN"], timeout=100)
         self._ny_health_data_client = Socrata("health.data.ny.gov", os.environ["SOCRATA_TOKEN"], timeout=100)
-        logging.info("Connected to Socrata clients!")
-        for url, name in self._table_name_mapping.items():
-            self._download_data(url, name)
+        logger.info("Connected to Socrata clients!")
+        # for url, name in self._table_name_mapping.items():
+        #     self._download_data(url, name)
+        self._download_data("https://health.data.ny.gov/resource/sn5m-dv52.json", "opioid_deaths_by_county")
         self._ny_health_data_client.close()
         self._ny_health_data_client.close()
-        logging.info("Economic data updated!")
-
-        # TODO setattr each data table as a pd.read_json?
-        # add constant with get all datasets method
+        logger.info("Economic data updated!")
 
     def _download_data(self, url, name):
         """
@@ -39,12 +40,12 @@ class SocrataEconomicData:
         table_string = self._get_dataset_string(url)
         if "health.data.ny" not in url:
             client = self._ny_state_data_client
-            logging.info("Using NY Data Socrata client!")
+            logger.info("Using NY Data Socrata client!")
         else:
             client = self._ny_health_data_client
-            logging.info("Using NY Health Data Socrata client!")
+            logger.info("Using NY Health Data Socrata client!")
         table_description = client.get_metadata(table_string)["name"]
-        logging.info("Downloading table: %s", table_description)
+        logger.info("Downloading table: %s", table_description)
         self._paginate_data(client, table_string, name)
 
     @retry(ReadTimeout)
@@ -62,16 +63,16 @@ class SocrataEconomicData:
         else:
             offset = self._get_table_length(table_dir)
         client.timeout = 50
-        logging.info("Pulling latest data!")
+        logger.info("Pulling latest data!")
         while client.get(table, limit=10000, offset=offset):
             data = pd.DataFrame.from_records(client.get(table, limit=10000, offset=offset))
-            logging.info(data.head())
+            logger.info(data.head())
             try:
                 data.to_json(table_dir + f"{offset}.json")
             except Exception as e:
-                logging.warning(e)
+                logger.warning(e)
             offset += len(data)
-            logging.info(
+            logger.info(
                 f"Downloaded output to {table_dir + f'{offset}.json'}"
             )
 

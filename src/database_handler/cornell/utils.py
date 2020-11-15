@@ -1,13 +1,17 @@
 import pandas as pd
 import numpy as np
 import logging
+from glob import glob
 
-from cornell.constants import (
+from database_handler.cornell.constants import (
     PROJECTED_DROP_COLUMNS,
     HISTORICAL_POPULATION_COLUMNS,
     PROJECTED_POPULATION_COLUMNS,
     MISSING_POPULATION_YEARS,
+    SOCRATA_TABLE_MAPPINGS
 )
+
+logger = logging.getLogger(__name__)
 
 
 def clean_historical_population_data(df: pd.DataFrame):
@@ -103,3 +107,30 @@ def merge_population_data(historical_df: pd.DataFrame, projected_df: pd.DataFram
     formatted_df = format_population_data(df)
     interpolated_df = interpolate_missing_data(formatted_df)
     return interpolated_df
+
+
+def normalize_socrata_data(population_data: pd.DataFrame, socrata_dataset: pd.DataFrame = 'opioid_deaths_by_county'):
+    """
+    Normalizes population-dependent statistics.
+    :param population_data:
+    :param socrata_dataset:
+    :return:
+    """
+    data_list = []
+    for f_name in glob(f'./data/socrata_economic_data/{socrata_dataset}/*.json'):
+        data_list.append(pd.read_json(f_name))
+    data = pd.concat(data_list)
+    data.year = data.year.astype(str)
+    data.county = data.county + ' County'
+    melted_population_data = population_data.reset_index().melt(['County']).rename(
+        columns={'variable': 'year', 'County': 'county'})
+    filtered_population_data = melted_population_data[
+        (melted_population_data['year'] <= max(data.year)) & (melted_population_data['year'] >= min(data.year))]
+    merged_data = filtered_population_data.merge(data, how='left', on=['county', 'year']).rename(
+        columns={'value': 'population'})
+    for unweighted_variable in SOCRATA_TABLE_MAPPINGS[socrata_dataset]['population']:
+        merged_data[f'{unweighted_variable}_rate'] = (
+                (merged_data[unweighted_variable] / merged_data['population']) * 100
+        )
+    logger.info(f'Merged data ::\n {merged_data}')
+    return merged_data
