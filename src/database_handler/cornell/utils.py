@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import logging
 from glob import glob
+from datetime import datetime
 
 from database_handler.cornell.constants import (
     PROJECTED_DROP_COLUMNS,
@@ -109,19 +110,37 @@ def merge_population_data(historical_df: pd.DataFrame, projected_df: pd.DataFram
     return interpolated_df
 
 
-def normalize_socrata_data(population_data: pd.DataFrame, socrata_dataset: pd.DataFrame = 'opioid_deaths_by_county'):
+def parse_construction_date_to_year(date: str):
+    try:
+        return datetime.strptime(date, '%b-%y').strftime('%Y')
+    except ValueError:
+        return datetime.strptime(date, '%B-%y').strftime('%Y')
+
+
+def normalize_socrata_data(population_data: pd.DataFrame, socrata_dataset: str = 'opioid_deaths_by_county'):
     """
     Normalizes population-dependent statistics.
     :param population_data:
     :param socrata_dataset:
     :return:
     """
+    logger.info("Normalizing population data!")
     data_list = []
     for f_name in glob(f'./data/socrata_economic_data/{socrata_dataset}/*.json'):
         data_list.append(pd.read_json(f_name))
     data = pd.concat(data_list)
+    if 'year' not in data.columns:
+        # if year not in columns, extract year from the first date-type columne
+        data['year'] = data[SOCRATA_TABLE_MAPPINGS[socrata_dataset]['year']].iloc[:,0].apply(parse_construction_date_to_year)
     data.year = data.year.astype(str)
-    data.county = data.county + ' County'
+    try:
+        if 'County' in data.columns:
+            data.county = data['County']
+
+        if not data['county'].str.contains(' County').any():
+            data.county = data.county + ' County'
+    except:
+        import pdb; pdb.set_trace()
     melted_population_data = population_data.reset_index().melt(['County']).rename(
         columns={'variable': 'year', 'County': 'county'})
     filtered_population_data = melted_population_data[
