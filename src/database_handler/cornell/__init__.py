@@ -1,1 +1,0 @@
-from database_handler.cornell.cornell_population_data import CornellPopulationData

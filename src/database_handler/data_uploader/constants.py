@@ -1,9 +1,7 @@
-NY_OVERDOSE_DATA = "./src/database_handler/socrata/assets/ny_sources.json"
-NY_DATA_DIR = "./data/socrata_economic_data/"
-
-SOCRATA_TABLE_MAPPINGS = {
+POPULATION_DATA = "./data/cornell_population_data/merged_ny_population_data.json"
+SOCRATA_KEY_COLUMNS = {
     "active_construction_by_county": {
-        "year": ["construction_completion_date", "construction_start_date"]
+        "year": ["construction_start_date", "construction_completion_date"]
     },
     "adult_arrest_data_by_county": {
         "year": ["year"],
@@ -11,7 +9,7 @@ SOCRATA_TABLE_MAPPINGS = {
             "total",
             "felony_total",
             "drug_felony",
-            "vionet_felony",
+            "violent_felony",
             "dwi_felony",
             "other_felony",
             "misdemeanor_total",
@@ -76,9 +74,7 @@ SOCRATA_TABLE_MAPPINGS = {
         "month": ["month"],
         "population": ["laborforce", "employed", "unemployed"],
     },
-    "long_term_industry_projection_by_county": {
-        "year": ["base_year", "projected_year"]
-    },
+    "long_term_industry_projection_by_county": {"year": []},
     "low_income_tax_credits_by_county": {
         "year": ["calendar_year"],
         "population": ["affordable_units"],
@@ -117,16 +113,16 @@ SOCRATA_TABLE_MAPPINGS = {
     "parole_data_by_county": {"year": ["snapshot_year"]},
     "recidivism_data_by_county": {"year": ["release_year"]},
     "short_term_industry_projection_by_county": {
-        "year": ["period"],
+        "year": [],
         "population": [
             "base_year_employment_estimate",
             "projected_year_employment_estimate",
             "net_change",
         ],
     },
-    "swm_data_by_county": {"year": ["expiration_date"]},
+    "swm_data_by_county": {"year": []},
     "unemployment_avg_duration_by_county": {"year": ["year"]},
     "union_compensation_claims_by_county": {
         "year": ["accident_date", "anrc_date", "assembly_date", "first_appeal_date"]
-    }
+    },
 }

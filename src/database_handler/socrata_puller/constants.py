@@ -1,4 +1,6 @@
-{
+NY_DATA_DIR = "./data/socrata_economic_data/"
+
+SOCRATA_TABLE_MAPPINGS = {
     "https://health.data.ny.gov/resource/jr8b-6gh6.json": "infuenza_cases_by_county",
     "https://health.data.ny.gov/resource/du4z-hmkb.json": "medicaid_patient_visits_by_county",
     "https://health.data.ny.gov/resource/rv8x-4fm3.json": "inpatient_discharges_by_county",
@@ -24,5 +26,5 @@
     "https://data.ny.gov/resource/rikd-mt35.json": "adult_arrest_data_by_county",
     "https://data.ny.gov/resource/nymx-kgkn.json": "jail_population_by_county",
     "https://data.ny.gov/resource/pmxm-gftz.json": "parole_data_by_county",
-    "https://data.ny.gov/resource/y7pw-wrny.json": "recidivism_data_by_county"
+    "https://data.ny.gov/resource/y7pw-wrny.json": "recidivism_data_by_county",
 }
