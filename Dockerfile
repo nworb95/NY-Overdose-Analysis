@@ -14,6 +14,12 @@ ENV LANG=C.UTF-8
 
 COPY poetry.lock pyproject.toml /app/
 
+RUN mkdir -p src/app/ && touch src/app/__init__.py
+RUN mkdir -p src/bokeh_plotter/ && touch src/bokeh_plotter/__init__.py
+RUN mkdir -p src/database_handler/cornell/ && touch src/database_handler/cornell/__init__.py
+RUN mkdir -p src/database_handler/socrata/ && touch src/database_handler/socrata/__init__.py
+RUN mkdir -p src/database_handler/utils/ && touch src/database_handler/utils/__init__.py
+
 RUN $HOME/.poetry/bin/poetry config virtualenvs.create false &&\
     $HOME/.poetry/bin/poetry run pip install -U pip && \
     $HOME/.poetry/bin/poetry install --no-ansi --no-dev

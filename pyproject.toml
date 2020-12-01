@@ -7,9 +7,9 @@ license = "MIT"
 packages = [
     { from = "src", include = "app"},
     { from = "src", include = "bokeh_plotter"},
-    { from = "src", include = "cornell"},
-    { from = "src", include = "socrata"},
-    { from = "src", include = "utils"}
+    { from = "src", include = "database_handler/cornell"},
+    { from = "src", include = "database_handler/socrata"},
+    { from = "src", include = "database_handler/utils"}
 ]
 
 [tool.poetry.dependencies]
@@ -37,6 +37,8 @@ typed-ast = "^1.4.1"
 urllib3 = "^1.25.8"
 xlrd = "^1.2.0"
 regex = "^2020.10.11"
+Flask-SQLAlchemy = "^2.4.4"
+Flask-Migrate = "^2.5.3"
 
 
 [tool.poetry.dev-dependencies]
